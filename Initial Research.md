@@ -19,11 +19,45 @@ Argon (Good security, slow to crack)
 
 If we are able to use GPU mining data, it will be substantially easier to implement a lot of the advanced features.
 
+### Nvidia GPUs
+
+Nvidia GPUs are the most common GPUs used for mining, and are the most common GPUs used for password cracking. They are also the most common GPUs used for gaming, so they are the most common GPUs in general.
+
+<!--GFLOPS for Nvidia GPUs-->
+
+|GPU|GFLOPS|
+|:-|:-|
+|RTX 3090 Ti|625|
+
 ## Calculating FLOPS of GPUs
+
+FLOPS is the number of calculations a device can make in a second, also known as math problems. We can calculate the FLOPS of a GPU by using the following formula:
+
+FLOPS = (GFLOPS * 1000000000) / 2
+
+This is because GPUs can only do 2 calculations at a time, so we divide by 2 to get the FLOPS.
+
+## Calculating 32-bit IOPS (Integer Operations Per Second)
+
+A 3090Ti can do 21596/GIOPS 
+
+## Calculating HPS of GPUs
+
+HPS is the number of guesses (password guesses) a device can make on a specific algorithm per second. We can calculate the HPS of a GPU by using the following formula:
+
+HPS = FLOPS / (Hashes per second of algorithm)
+
+## Calculating time to crack
+
+Time to crack = (Number of hashes in database) / (HPS of GPU)
+
+## Calculating time to crack with multiple GPUs
+
+Time to crack = (Number of hashes in database) / (HPS of GPUs)
 
 ### FP64
 
-(SMs *GHz)* 4 = FP64 Performance in GFLOPS
+(SMs * GHz) * 4 = FP64 Performance in GFLOPS
 SMs = Stream Multiprocessors
 GHz = Frequency of individual CUDA Cores
 FP64 = (Double) Precision Floating-Point Format
@@ -31,7 +65,7 @@ FP64 = (Double) Precision Floating-Point Format
 An example would be,
 3090Ti has 84 Stream Multiprocessors
 3090Ti has a boost clock of 1.86GHz
-(84 *1.86)* 4 = 624.96 (FP64) GFLOPS
+(84 * 1.86) * 4 = 624.96 (FP64) GFLOPS
 Real-world result: 625.0 GFLOPS
 
 ### FP32
@@ -39,7 +73,7 @@ Real-world result: 625.0 GFLOPS
 Double Precision Flops Rating = Clock frequency x CUDA Cores x 2 x Clock cycles
 X = Clock Cycles
 I’m unsure of what the relevance of Clock Cycles are in this case but it doesn’t seem to be relevant as I get the correct answer without it.
-((GHz *Core)* 2) * X
+((GHz * Core) * 2) * X
 
 An example would be,
 1.86 (Boost clock speed)   *10752 (Core count) = 19,998.72
@@ -47,9 +81,19 @@ An example would be,
 
 Real-world result:  40.00 TFLOPS
 
-I believe we should use FP64 as it’s more precise in the number of decimals it has… Though this is irrelevant if we are just randomly guessing. Eh, I found this article saying most hashing algorithms do not use floating-point operations and only use integers, so the data above may be irrelevant. Maybe we have to use IOPS (Interger operations per second)?
+I believe we should use FP64 as it’s more precise in the number of decimals it has… Though this is irrelevant if we are just randomly guessing. Eh, I found this article saying most hashing algorithms do not use floating-point operations and only use integers, so the data above may be irrelevant. Maybe we have to use IPS (Instructions per second)?
 
     "NVIDIA believes in modern games relying heavily on integer math. With the new architecture, we still have the 64 FP32 cores, but another 64 cores are now designated as “FP32 and INT32”, making half the cores capable of doing either floating-point or integer calculations. Since password recovery relies on integer math, we can effectively utilize half the Ampere cores. You can read a tech article about the new Ampere architecture at Engadget."
+
+I believe we need to calculate the amount of instructions to complete one round of the hashing algorithm, for a hashing algo like SHA256, on average it takes 64 - 80 Clock Cycles to complete on round.
+
+    To estimate the performance of MD5-crypt on a given architecture, we first define
+    a simple model that is based on the number of arithmetic instructions needed to
+    complete one round of the password hashing scheme. Since it is not very hard to
+    estimate the instruction throughput of a hardware platform, this model can be
+    used to compare the performance of the hashing scheme on different architectures
+    and determines the maxim speedup that can be achieved. To define this model,
+    all arithmetic and logic operations are taken into account
 
 ## Real-world HASHCAT 3090-Ti benchmarks algorithm’s results
 
@@ -62,6 +106,7 @@ SHA-256 (pass + salt) - 9746.6 MH/s
 And a lot more I did not include because there was so much.
 Data collected from Hashcat v6.1.1 benchmark on the Nvidia RTX 3090 · GitHub
 Sources:
+<https://www.ru.nl/publish/pages/769526/thesis.pdf>
 <https://www.hivesystems.io/blog/are-your-passwords-in-the-green>
 <https://developer.okta.com/blog/2019/07/29/hashing-techniques-for-password-storage>
 <https://www.tomshardware.com/news/eight-rtx-4090s-can-break-passwords-in-under-an-hour>
