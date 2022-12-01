@@ -49,7 +49,7 @@ Real-world result:  40.00 TFLOPS
 
 I believe we should use FP64 as it’s more precise in the number of decimals it has… Though this is irrelevant if we are just randomly guessing. Eh, I found this article saying most hashing algorithms do not use floating-point operations and only use integers, so the data above may be irrelevant. Maybe we have to use IOPS (Interger operations per second)?
 
- "NVIDIA believes in modern games relying heavily on integer math. With the new architecture, we still have the 64 FP32 cores, but another 64 cores are now designated as “FP32 and INT32”, making half the cores capable of doing either floating-point or integer calculations. Since password recovery relies on integer math, we can effectively utilize half the Ampere cores. You can read a tech article about the new Ampere architecture at Engadget."
+    "NVIDIA believes in modern games relying heavily on integer math. With the new architecture, we still have the 64 FP32 cores, but another 64 cores are now designated as “FP32 and INT32”, making half the cores capable of doing either floating-point or integer calculations. Since password recovery relies on integer math, we can effectively utilize half the Ampere cores. You can read a tech article about the new Ampere architecture at Engadget."
 
 ## Real-world HASHCAT 3090-Ti benchmarks algorithm’s results
 
