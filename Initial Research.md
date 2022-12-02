@@ -49,7 +49,7 @@ Nvidia GPUs are the most common GPUs used for mining, and are the most common GP
 can u sort the GFLOPS in this array?
 --->
 ## Converting FLOPS of GPUs
-#
+
 FLOPS is the number of floating-point calculations a device can make in a second, also known as math problems. We can calculate the FLOPS by using the following formula:
 GFLOPS = (FLOPS * 1000000000) / 2
 TFLOPS = (FLOPS * 10000000000) / 2
