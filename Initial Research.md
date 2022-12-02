@@ -20,26 +20,39 @@ Argon (Good security, slow to crack)
 If we are able to use GPU mining data, it will be substantially easier to implement a lot of the advanced features.
 
 ### Nvidia GPUs
-
+#
 Nvidia GPUs are the most common GPUs used for mining, and are the most common GPUs used for password cracking. They are also the most common GPUs used for gaming, so they are the most common GPUs in general.
 
 <!--GFLOPS for Nvidia GPUs-->
+1 GFLOP is approx 127.451434323 MH for MD5 
 
-|GPU|GFLOPS|
+    127.4514343231001509813789632612
+
+|GPU|GFLOPS (FP64)|
 |:-|:-|
 |RTX 3090 Ti|625|
-
-## Calculating FLOPS of GPUs
-
-FLOPS is the number of calculations a device can make in a second, also known as math problems. We can calculate the FLOPS of a GPU by using the following formula:
-
-FLOPS = (GFLOPS * 1000000000) / 2
-
-This is because GPUs can only do 2 calculations at a time, so we divide by 2 to get the FLOPS.
-
-## Calculating 32-bit IOPS (Integer Operations Per Second)
-
-A 3090Ti can do 21596/GIOPS 
+|RTX 3090 |556|
+|RTX 3080|465|
+|RTX 3070 Ti| 339|
+|RTX 3070 |317|
+|RTX 2070 Super|283|
+|RTX 2080 Ti |420|
+|RTX 3060 Ti |253|
+|RTX 2060 Super |224|
+|RTX 2060 |201|
+|RTX 3060 |199|
+|RTX 1660 Ti |169|
+|RTX 1660 Super |157|
+|RTX 4090 |1290|
+|RTX 3080 Ti|532|
+<!---
+can u sort the GFLOPS in this array?
+--->
+## Converting FLOPS of GPUs
+#
+FLOPS is the number of floating-point calculations a device can make in a second, also known as math problems. We can calculate the FLOPS by using the following formula:
+GFLOPS = (FLOPS * 1000000000) / 2
+TFLOPS = (FLOPS * 10000000000) / 2
 
 ## Calculating HPS of GPUs
 
