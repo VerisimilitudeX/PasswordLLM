@@ -25,6 +25,7 @@ GPG/PGP| N/A
 SHA-1 SHA-256, SHA384|Difficult to Crack
 RSA/DSA/EC/OpenSSH Private Keys| Very difficult to crack
 7-Zip| N/A
+AES-128/192/256|Impossible to crack
 
 If we are able to use GPU mining data, it will be substantially easier to implement a lot of the advanced features.
 
