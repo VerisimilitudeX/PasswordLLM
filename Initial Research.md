@@ -11,11 +11,12 @@ Passwords hashed in specific algorithms must be decrypted using the same algorit
 We may be able to create a database of popular graphics cards and their FLOPS then find out how many FLOPS it takes for every hash in every algorithm.
 
 ## Most common password hashing algorithms
-
-MD5 (Second most common, easy to crack)
-SHA-1, SHA-256, SHA384 (Most Common in General, somewhat easy to crack)
-BCrypt (Best for security, slowest to crack)
-Argon (Good security, slow to crack)
+|ALGO|DESC|
+|:-|:-|
+MD5|(Second most common, easy to crack)
+SHA-1 SHA-256, SHA384|(Most Common in General, somewhat easy to crack)
+BCrypt|(Best for security, slowest to crack)
+Argon|(Good security, slow to crack)
 
 If we are able to use GPU mining data, it will be substantially easier to implement a lot of the advanced features.
 
