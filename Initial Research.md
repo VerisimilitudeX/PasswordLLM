@@ -34,9 +34,9 @@ If we are able to use GPU mining data, it will be substantially easier to implem
 Nvidia GPUs are the most common GPUs used for mining, and are the most common GPUs used for password cracking. They are also the most common GPUs used for gaming, so they are the most common GPUs in general.
 
 <!--GFLOPS for Nvidia GPUs-->
-1 GFLOP is approx 127.451434323 MH for MD5 
+1 GFLOP is approx 124 MH for MD5 
 
-    127.4514343231001509813789632612
+    124.73870362350223762090371011982
 
 |GPU|GFLOPS (FP64)|
 |:-|:-|
