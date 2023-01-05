@@ -28,7 +28,7 @@ while True:
         count = 0
         for values in acceptable_formats:
             if unit == values:
-                count += 1
+                count++
         print(count)
         if count != 1:
             # format_input is not in acceptable_formats
