@@ -10,12 +10,22 @@ Passwords hashed in specific algorithms must be decrypted using the same algorit
 
 We may be able to create a database of popular graphics cards and their FLOPS then find out how many FLOPS it takes for every hash in every algorithm.
 
-## Most common password hashing algorithms
+# Most common password hashing algorithms in order of most to least common
+|ALGO|DESCRIPTION|
+|:-|:-|
+SHA-1 SHA-256, SHA384|Difficult to Crack
+MD5|Easier to crack
+BCrypt|Best for security, Hard to crack
+Argon2|Hard to crack
 
-MD5 (Second most common, easy to crack)
-SHA-1, SHA-256, SHA384 (Most Common in General, somewhat easy to crack)
-BCrypt (Best for security, slowest to crack)
-Argon (Good security, slow to crack)
+# Most common data hasing algorithms in order of most to least common
+|ALGO|DESCRIPTION|
+|:-|:-|
+AES-128/192/256|Impossible to crack
+RSA/DSA/EC/OpenSSH Private Keys| Very difficult to crack
+GPG/PGP| N/A
+SHA-1 SHA-256, SHA384|Difficult to Crack
+7-Zip| N/A
 
 If we are able to use GPU mining data, it will be substantially easier to implement a lot of the advanced features.
 
@@ -24,9 +34,9 @@ If we are able to use GPU mining data, it will be substantially easier to implem
 Nvidia GPUs are the most common GPUs used for mining, and are the most common GPUs used for password cracking. They are also the most common GPUs used for gaming, so they are the most common GPUs in general.
 
 <!--GFLOPS for Nvidia GPUs-->
-1 GFLOP is approx 127.451434323 MH for MD5 
+1 GFLOP is approx 124 MH for MD5 
 
-    127.4514343231001509813789632612
+    124.73870362350223762090371011982
 
 |GPU|GFLOPS (FP64)|
 |:-|:-|
