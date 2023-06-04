@@ -1,14 +1,14 @@
 use std::{f32::DIGITS, string};
 use std::env;
 use regex::Regex;
-
+// entire file calculates the entropy
 fn main() {
     let args: Vec<String> = env::args().collect();
     let password = &args[1];
     println!("Hello, {password}!");
 
 }
-
+// pool size based on https://github.com/Kush-munot/Password-Strength-Checker
 fn get_pool_size(password: String) -> i32{
     struct PoolTable{
         Digits: bool,
@@ -34,7 +34,7 @@ fn get_pool_size(password: String) -> i32{
 
             password_characteristics.Low_case = Regex::new(r#"[a-z]"#).unwrap().is_match(&password);
             password_characteristics.Up_case = Regex::new(r#"[A-Z]"#).unwrap().is_match(&password);
-            password_characteristics.Digits = Regex::new(r#"\d"#).unwrap().is_match(&password);
+            password_characteristics.Digits = Regex::new(r#"\d"#).unwrap().is_match(&password); // updates passsword_characteristcs struct with bool values if password contains
             password_characteristics.Special = Regex::new(r#"[^\w\s]"#).unwrap().is_match(&password);
             return password_characteristics;
         }
@@ -44,7 +44,7 @@ fn get_pool_size(password: String) -> i32{
     let mut pool_score = 0;
     match &password_characteristics {
         PoolTable { Digits: true, .. } => pool_score += 10,
-        PoolTable { Low_case: true, .. } => pool_score += 26,
+        PoolTable { Low_case: true, .. } => pool_score += 26, // add to scoring
         PoolTable { Up_case: true, .. } => pool_score += 26,
         PoolTable { Special: true, .. } => pool_score += 32,
         _ => {}
@@ -54,5 +54,5 @@ fn get_pool_size(password: String) -> i32{
 }
 
 
-fn calculate_entropy() {}
+fn calculate_entropy() {} // calculates entropy from the pool_score
 
