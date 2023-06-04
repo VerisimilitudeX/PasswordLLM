@@ -1,9 +1,11 @@
-use std::f32::DIGITS;
-
+use std::{f32::DIGITS, string};
+use std::env;
 use regex::Regex;
 
 fn main() {
-    println!("Hello, world!");
+    let args: Vec<String> = env::args().collect();
+    let password = &args[1];
+    println!("Hello, {password}!");
 
 }
 
