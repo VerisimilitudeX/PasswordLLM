@@ -5,12 +5,14 @@ use regex::Regex;
 // Entire file calculates the entropy
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let password = &args[0];
-    println!("Hello, {}!", password);
+    let password = &args[1];
+    let PoolSize = GetPoolSize(password.to_string());
+    let Entropy = calculate_entropy(PoolSize);
+    println!("Entropy: {}", Entropy);
 }
 
 // Pool size based on https://github.com/Kush-munot/Password-Strength-Checker
-fn get_pool_size(password: String) -> i32 {
+fn GetPoolSize(password: String) -> Vec<u16> {
     struct PoolTable {
         digits: bool,
         low_case: bool,
@@ -18,37 +20,45 @@ fn get_pool_size(password: String) -> i32 {
         special: bool,
     }
 
-    impl PoolTable {
-        fn calculate(&mut self, password: &String) {
-            assert!(password.is_ascii());
 
-            self.low_case = Regex::new(r#"[a-z]"#).unwrap().is_match(&password);
-            self.up_case = Regex::new(r#"[A-Z]"#).unwrap().is_match(&password);
-            self.digits = Regex::new(r#"\d"#).unwrap().is_match(&password); // Updates password_characteristics struct with bool values if password contains
-            self.special = Regex::new(r#"[^\w\s]"#).unwrap().is_match(&password);
-        }
+    fn calculate(password: &String) -> PoolTable {
+        //assert!(password.is_ascii());
+
+        let mut password_characteristics = PoolTable {
+            digits: false,
+            low_case: false,
+            up_case: false,
+            special: false,
+        };
+
+        password_characteristics.low_case = Regex::new(r#"[a-z]"#).unwrap().is_match(&password);
+        password_characteristics.up_case = Regex::new(r#"[A-Z]"#).unwrap().is_match(&password);
+        password_characteristics.digits = Regex::new(r#"\d"#).unwrap().is_match(&password); // Updates password_characteristics struct with bool values if password contains
+        password_characteristics.special = Regex::new(r#"[^\w\s]"#).unwrap().is_match(&password);
+        password_characteristics
+    
     }
 
-    let mut password_characteristics = PoolTable {
-        digits: false,
-        low_case: false,
-        up_case: false,
-        special: false,
-    };
+    let pass_char = calculate(&password);
 
-    password_characteristics.calculate(&password);
-
-    let mut pool_score = 0;
-    match password_characteristics {
+    let mut pool_score: i32 = 0;
+    match pass_char {
         PoolTable { digits: true, .. } => pool_score += 10,
         PoolTable { low_case: true, .. } => pool_score += 26, // Add to scoring
         PoolTable { up_case: true, .. } => pool_score += 26,
         PoolTable { special: true, .. } => pool_score += 32,
         _ => {}
     }
-    pool_score
+    let score: Vec<u16> = vec![pool_score.try_into().unwrap(), password.chars().count().try_into().unwrap()];
+    score
+
 }
 
-fn calculate_entropy() {
+fn calculate_entropy(pool_score: Vec<u16>) -> f64 {
     // Calculates entropy from the pool_score
+    let score = pool_score[0];
+    let password_length = pool_score[1];
+
+    let entropy: f64 = (score.pow(password_length as u32) as f64).log2();
+    entropy
 }
