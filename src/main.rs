@@ -1,4 +1,4 @@
-use std::{env, string};
+use std::{env};
 extern crate regex;
 use regex::Regex;
 
@@ -6,20 +6,21 @@ use regex::Regex;
 fn main() {
     let args: Vec<String> = env::args().collect();
     let password = &args[1];
+  
     let PoolSize = GetPoolSize(password.to_string());
-    let Entropy = calculate_entropy(PoolSize);
+    let Entropy = calculate_entropy(PoolSize.clone());
     println!("Entropy: {}", Entropy);
+    println!("Pool Size: {:?}", PoolSize[0].clone())
 }
 
 // Pool size based on https://github.com/Kush-munot/Password-Strength-Checker
-fn GetPoolSize(password: String) -> Vec<u16> {
+fn GetPoolSize(password: String) -> Vec<u64> {
     struct PoolTable {
         digits: bool,
         low_case: bool,
         up_case: bool,
         special: bool,
     }
-
 
     fn calculate(password: &String) -> PoolTable {
         //assert!(password.is_ascii());
@@ -49,16 +50,16 @@ fn GetPoolSize(password: String) -> Vec<u16> {
         PoolTable { special: true, .. } => pool_score += 32,
         _ => {}
     }
-    let score: Vec<u16> = vec![pool_score.try_into().unwrap(), password.chars().count().try_into().unwrap()];
+    let score: Vec<u64> = vec![pool_score.try_into().unwrap(), password.chars().count().try_into().unwrap()];
     score
 
 }
 
-fn calculate_entropy(pool_score: Vec<u16>) -> f64 {
+fn calculate_entropy(pool_score: Vec<u64>) -> f64 {
     // Calculates entropy from the pool_score
-    let score = pool_score[0];
-    let password_length = pool_score[1];
+    let score: u64 = pool_score[0];
+    let password_length: u64 = pool_score[1];
 
     let entropy: f64 = (score.pow(password_length as u32) as f64).log2();
-    entropy
+    entropy.round()
 }
