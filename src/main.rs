@@ -66,9 +66,8 @@ pub fn GetPoolSize(password: String) -> Vec<u64> {
 }
 
 pub fn calculate_entropy(pool_score: Vec<u64>) -> f64 {
-    // Calculates entropy from the pool_score
     let score: f64 = pool_score[0] as f64;
-    let password_length: u64 = pool_score[1];
+    let password_length: usize = pool_score[1] as usize; // Update the type to usize
 
     let entropy: f64 = (score.powf(password_length as f64)).log2();
     entropy.round()
