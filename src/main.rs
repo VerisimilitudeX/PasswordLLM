@@ -1,16 +1,17 @@
+mod test;
 use std::{env};
 extern crate regex;
 use regex::Regex;
 
 // Entire file calculates the entropy
-fn main() {
+pub fn main(){
     let args: Vec<String> = env::args().collect();
     let password = &args[1];
-  
+
     let PoolSize = GetPoolSize(password.to_string());
     let Entropy = calculate_entropy(PoolSize.clone());
     println!("Entropy: {} bits", Entropy);
-    println!("Pool Size: {:?}", PoolSize[0].clone())
+    println!("Pool Size: {:?}", PoolSize[0].clone());
 }
 
 // Pool size based on https://github.com/Kush-munot/Password-Strength-Checker
@@ -42,27 +43,23 @@ pub fn GetPoolSize(password: String) -> Vec<u64> {
 
     let pass_char = calculate(&password);
 
-    let mut pool_score: i32 = 0;
-    match pass_char {
-        PoolTable { digits: true, low_case: true, .. } => {
-            pool_score += 10;
-            pool_score += 26;
-        }
-        PoolTable { digits: true, up_case: true, .. } => {
-            pool_score += 10;
-            pool_score += 26;
-        }
-        PoolTable { digits: true, special: true, .. } => {
-            pool_score += 10;
-            pool_score += 32;
-        }
-        PoolTable { low_case: true, up_case: true, .. } => {
-            pool_score += 26;
-            pool_score += 26;
-        }
-        // Add more patterns and corresponding actions as needed
-        _ => {}
+    let mut pool_score: i64 = 0;
+    if pass_char.digits {
+        pool_score += 10;
     }
+    
+    if pass_char.low_case {
+        pool_score += 26;
+    }
+    
+    if pass_char.up_case {
+        pool_score += 26;
+    }
+    
+    if pass_char.special {
+        pool_score += 32;
+    }
+    
     let score: Vec<u64> = vec![pool_score.try_into().unwrap(), password.chars().count().try_into().unwrap()];
     score
 
