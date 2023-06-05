@@ -14,8 +14,8 @@ fn main() {
 }
 
 // Pool size based on https://github.com/Kush-munot/Password-Strength-Checker
-fn GetPoolSize(password: String) -> Vec<u64> {
-    struct PoolTable {
+pub fn GetPoolSize(password: String) -> Vec<u64> {
+    pub struct PoolTable {
         digits: bool,
         low_case: bool,
         up_case: bool,
@@ -55,7 +55,7 @@ fn GetPoolSize(password: String) -> Vec<u64> {
 
 }
 
-fn calculate_entropy(pool_score: Vec<u64>) -> f64 {
+pub fn calculate_entropy(pool_score: Vec<u64>) -> f64 {
     // Calculates entropy from the pool_score
     let score: u64 = pool_score[0];
     let password_length: u64 = pool_score[1];
