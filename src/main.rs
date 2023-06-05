@@ -9,7 +9,7 @@ fn main() {
   
     let PoolSize = GetPoolSize(password.to_string());
     let Entropy = calculate_entropy(PoolSize.clone());
-    println!("Entropy: {}", Entropy);
+    println!("Entropy: {} bits", Entropy);
     println!("Pool Size: {:?}", PoolSize[0].clone())
 }
 
@@ -34,8 +34,8 @@ pub fn GetPoolSize(password: String) -> Vec<u64> {
 
         password_characteristics.low_case = Regex::new(r#"[a-z]"#).unwrap().is_match(&password);
         password_characteristics.up_case = Regex::new(r#"[A-Z]"#).unwrap().is_match(&password);
-        password_characteristics.digits = Regex::new(r#"\d"#).unwrap().is_match(&password); // Updates password_characteristics struct with bool values if password contains
-        password_characteristics.special = Regex::new(r#"[^\w\s]"#).unwrap().is_match(&password);
+        password_characteristics.digits = Regex::new(r#"[\d]"#).unwrap().is_match(&password); // Updates password_characteristics struct with bool values if password contains
+        password_characteristics.special = Regex::new(r#"[^A-Za-z0-9\s]"#).unwrap().is_match(&password);
         password_characteristics
     
     }
@@ -44,10 +44,23 @@ pub fn GetPoolSize(password: String) -> Vec<u64> {
 
     let mut pool_score: i32 = 0;
     match pass_char {
-        PoolTable { digits: true, .. } => pool_score += 10,
-        PoolTable { low_case: true, .. } => pool_score += 26, // Add to scoring
-        PoolTable { up_case: true, .. } => pool_score += 26,
-        PoolTable { special: true, .. } => pool_score += 32,
+        PoolTable { digits: true, low_case: true, .. } => {
+            pool_score += 10;
+            pool_score += 26;
+        }
+        PoolTable { digits: true, up_case: true, .. } => {
+            pool_score += 10;
+            pool_score += 26;
+        }
+        PoolTable { digits: true, special: true, .. } => {
+            pool_score += 10;
+            pool_score += 32;
+        }
+        PoolTable { low_case: true, up_case: true, .. } => {
+            pool_score += 26;
+            pool_score += 26;
+        }
+        // Add more patterns and corresponding actions as needed
         _ => {}
     }
     let score: Vec<u64> = vec![pool_score.try_into().unwrap(), password.chars().count().try_into().unwrap()];
