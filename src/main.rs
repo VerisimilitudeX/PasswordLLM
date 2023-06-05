@@ -23,7 +23,7 @@ pub fn GetPoolSize(password: String) -> Vec<u64> {
     }
 
     fn calculate(password: &String) -> PoolTable {
-        //assert!(password.is_ascii());
+        assert!(password.is_ascii());
 
         let mut password_characteristics = PoolTable {
             digits: false,
