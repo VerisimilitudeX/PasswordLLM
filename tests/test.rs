@@ -1,6 +1,5 @@
 #[cfg(test)]
-mod tests {
-    use super::*;
+mod test {
 
     #[test]
     fn test_pool_size_and_entropy() {
