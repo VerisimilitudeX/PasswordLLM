@@ -1,6 +1,5 @@
 mod test;
 use std::env::{self};
-use regex;
 use regex::Regex;
 mod utils;
 use utils::PwnedAPI::pass_check;
@@ -10,15 +9,16 @@ use round::round;
 pub fn main(){
     let args: Vec<String> = env::args().collect();
     let password;
+
     if args.len() > 1 {
         password = args[1].clone();
     } else {
         password = rpassword::prompt_password("Password: ").unwrap();
     }
-    
+
     let pool_size = get_pool_size(password.to_string());
-    let entropy = calculate_entropy(pool_size.clone());
-    check_if_pwned(password.to_string());
+    let entropy = calculate_entropy(pool_size);
+    check_if_pwned(password);
 
     match entropy as i64 {
         strength if strength < 80 => println!("Password strength: Weak"),
@@ -33,23 +33,23 @@ pub fn main(){
 // Pool size based on https://github.com/Kush-munot/Password-Strength-Checker
 pub fn get_pool_size(password: String) -> Vec<u64> {
 
-    fn calculate(password: &String) -> i64 {
+    fn calculate(password: &str) -> i64 {
         assert!(password.is_ascii());
         let mut pool_score: i64 = 0;
 
-        if Regex::new(r#"[A-Z]"#).unwrap().is_match(&password) {
+        if Regex::new(r#"[A-Z]"#).unwrap().is_match(password) {
             pool_score += 26
         }
   
-        if Regex::new(r#"[a-z]"#).unwrap().is_match(&password) {
+        if Regex::new(r#"[a-z]"#).unwrap().is_match(password) {
             pool_score += 26;
         }
 
-        if Regex::new(r#"[\d]"#).unwrap().is_match(&password) {
+        if Regex::new(r#"[\d]"#).unwrap().is_match(password) {
             pool_score += 10
         }
         // Updates password_characteristics struct with bool values if password contains digits
-        if Regex::new(r#"[^A-Za-z0-9\s]"#).unwrap().is_match(&password) {
+        if Regex::new(r#"[^A-Za-z0-9\s]"#).unwrap().is_match(password) {
             pool_score += 32;
         }
         pool_score
@@ -74,7 +74,7 @@ pub fn calculate_entropy(pool_score: Vec<u64>) -> f64 {
 }
 
 fn check_if_pwned(password: String) {
-    let pass_check = pass_check(password.to_string());
+    let pass_check = pass_check(password);
 
     match pass_check {
         Ok(()) => println!("Password has been pwned!"),
