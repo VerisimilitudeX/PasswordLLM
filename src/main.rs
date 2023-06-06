@@ -9,8 +9,6 @@ use round::round;
 
 pub fn main(){
     let args: Vec<String> = env::args().collect();
-    let args_len= args.len();
-
     let password;
     if args.len() > 1 {
         password = args[1].clone();
@@ -34,12 +32,6 @@ pub fn main(){
 
 // Pool size based on https://github.com/Kush-munot/Password-Strength-Checker
 pub fn get_pool_size(password: String) -> Vec<u64> {
-    pub struct PoolTable {
-        digits: bool,
-        low_case: bool,
-        up_case: bool,
-        special: bool,
-    }
 
     fn calculate(password: &String) -> i64 {
         assert!(password.is_ascii());
