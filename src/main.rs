@@ -32,8 +32,6 @@ pub fn main(){
     println!("Entropy: {} bits", entropy);
 }
 
-
-
 // Pool size based on https://github.com/Kush-munot/Password-Strength-Checker
 pub fn get_pool_size(password: String) -> Vec<u64> {
     pub struct PoolTable {
@@ -45,22 +43,21 @@ pub fn get_pool_size(password: String) -> Vec<u64> {
 
     fn calculate(password: &String) -> i64 {
         assert!(password.is_ascii());
-
         let mut pool_score: i64 = 0;
 
-        if (Regex::new(r#"[A-Z]"#).unwrap().is_match(&password)) {
+        if Regex::new(r#"[A-Z]"#).unwrap().is_match(&password) {
             pool_score += 26
         }
   
-        if (Regex::new(r#"[a-z]"#).unwrap().is_match(&password)) {
+        if Regex::new(r#"[a-z]"#).unwrap().is_match(&password) {
             pool_score += 26;
         }
 
-        if (Regex::new(r#"[\d]"#).unwrap().is_match(&password)) {
+        if Regex::new(r#"[\d]"#).unwrap().is_match(&password) {
             pool_score += 10
         }
         // Updates password_characteristics struct with bool values if password contains digits
-        if (Regex::new(r#"[^A-Za-z0-9\s]"#).unwrap().is_match(&password)) {
+        if Regex::new(r#"[^A-Za-z0-9\s]"#).unwrap().is_match(&password) {
             pool_score += 32;
         }
         pool_score
