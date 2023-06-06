@@ -4,14 +4,23 @@ extern crate regex;
 use regex::Regex;
 
 // Entire file calculates the entropy
+
 pub fn main() {
     let args: Vec<String> = env::args().collect();
     let password = &args[1];
 
     let pool_size = get_pool_size(password.to_string());
     let entropy = calculate_entropy(pool_size.clone());
+
+    match entropy as i64 {
+        strength if strength < 80 => println!("Password strength: Weak"),
+        strength if strength < 112 => println!("Password strength: Medium"),
+        strength if strength < 128 => println!("Password strength: Strong"),
+        _ => println!("Password strength: Very Strong"),
+    }
+    
     println!("Entropy: {} bits", entropy);
-    println!("Pool Size: {:?}", pool_size[0].clone());
+
 }
 
 // Pool size based on https://github.com/Kush-munot/Password-Strength-Checker
@@ -39,6 +48,7 @@ pub fn get_pool_size(password: String) -> Vec<u64> {
         // Updates password_characteristics struct with bool values if password contains digits
         password_characteristics.special = Regex::new(r#"[^A-Za-z0-9\s]"#).unwrap().is_match(&password);
         
+        
         password_characteristics
     }
 
@@ -48,6 +58,7 @@ pub fn get_pool_size(password: String) -> Vec<u64> {
     if pass_char.digits {
         pool_score += 10;
     }
+
 
     if pass_char.low_case {
         pool_score += 26;
