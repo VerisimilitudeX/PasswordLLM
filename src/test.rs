@@ -5,7 +5,7 @@ mod test {
     // Test cases with different passcodes
     static TEST_CASES: &[(&str, u64, i64)] = &[
         ("password", 26, 38),     // Pool size: 26 (low_case) + 10 (digits), Entropy: 38
-        ("Password123", 62, 65),  // Pool size: 26 (low_case) + 26 (up_case) + 10 (digits), Entropy: 65
+        ("Password123", 62, 66),  // Pool size: 26 (low_case) + 26 (up_case) + 10 (digits), Entropy: 65
         ("!@#123", 42, 32),       // Pool size: 26 (low_case) + 26 (up_case) + 10 (digits) + 6 (special), Entropy: 32
     ];
 
