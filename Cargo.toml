@@ -11,3 +11,7 @@ sha1 = "0.10.5"
 anyhow = "1.0.71"
 rpassword = "7.2"
 try-catch = "0.2.2"
+reqwest = { version = "0.11", features = ["json"] }
+tokio = { version = "1.28.2", features = ["full"] }
+hex = "0.4.3"
+round = "0.1.2"
