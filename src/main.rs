@@ -1,14 +1,24 @@
 mod test;
-use std::env;
+use std::env::{self};
 extern crate regex;
 use regex::Regex;
+use anyhow::{Context, Result};
+use sha1::{Sha1, Digest};
+extern crate rpassword;
 
 // Entire file calculates the entropy
 
 pub fn main() {
     let args: Vec<String> = env::args().collect();
-    let password = &args[1];
+    let args_len= args.len();
 
+    let mut password;
+    if args.len() > 1 {
+        password = args[1].clone();
+    } else {
+        password = rpassword::prompt_password("Password: ").unwrap();
+    }
+    
     let pool_size = get_pool_size(password.to_string());
     let entropy = calculate_entropy(pool_size.clone());
 
@@ -22,6 +32,8 @@ pub fn main() {
     println!("Entropy: {} bits", entropy);
 
 }
+
+
 
 // Pool size based on https://github.com/Kush-munot/Password-Strength-Checker
 pub fn get_pool_size(password: String) -> Vec<u64> {
