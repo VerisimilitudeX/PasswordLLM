@@ -1,18 +1,17 @@
 mod test;
 use std::env::{self};
-extern crate regex;
+use regex;
 use regex::Regex;
-use anyhow::{Context, Result};
-use sha1::{Sha1, Digest};
-extern crate rpassword;
-
+mod utils;
+use utils::PwnedAPI::pass_check;
+use round::round;
 // Entire file calculates the entropy
 
-pub fn main() {
+pub fn main(){
     let args: Vec<String> = env::args().collect();
     let args_len= args.len();
 
-    let mut password;
+    let password;
     if args.len() > 1 {
         password = args[1].clone();
     } else {
@@ -21,6 +20,7 @@ pub fn main() {
     
     let pool_size = get_pool_size(password.to_string());
     let entropy = calculate_entropy(pool_size.clone());
+    check_if_pwned(password.to_string());
 
     match entropy as i64 {
         strength if strength < 80 => println!("Password strength: Weak"),
@@ -30,7 +30,6 @@ pub fn main() {
     }
     
     println!("Entropy: {} bits", entropy);
-
 }
 
 
@@ -44,45 +43,30 @@ pub fn get_pool_size(password: String) -> Vec<u64> {
         special: bool,
     }
 
-    fn calculate(password: &String) -> PoolTable {
+    fn calculate(password: &String) -> i64 {
         assert!(password.is_ascii());
 
-        let mut password_characteristics = PoolTable {
-            digits: false,
-            low_case: false,
-            up_case: false,
-            special: false,
-        };
+        let mut pool_score: i64 = 0;
 
-        password_characteristics.low_case = Regex::new(r#"[a-z]"#).unwrap().is_match(&password);
-        password_characteristics.up_case = Regex::new(r#"[A-Z]"#).unwrap().is_match(&password);
-        password_characteristics.digits = Regex::new(r#"[\d]"#).unwrap().is_match(&password);
+        if (Regex::new(r#"[A-Z]"#).unwrap().is_match(&password)) {
+            pool_score += 26
+        }
+  
+        if (Regex::new(r#"[a-z]"#).unwrap().is_match(&password)) {
+            pool_score += 26;
+        }
+
+        if (Regex::new(r#"[\d]"#).unwrap().is_match(&password)) {
+            pool_score += 10
+        }
         // Updates password_characteristics struct with bool values if password contains digits
-        password_characteristics.special = Regex::new(r#"[^A-Za-z0-9\s]"#).unwrap().is_match(&password);
-        
-        
-        password_characteristics
+        if (Regex::new(r#"[^A-Za-z0-9\s]"#).unwrap().is_match(&password)) {
+            pool_score += 32;
+        }
+        pool_score
     }
 
-    let pass_char = calculate(&password);
-
-    let mut pool_score: i64 = 0;
-    if pass_char.digits {
-        pool_score += 10;
-    }
-
-
-    if pass_char.low_case {
-        pool_score += 26;
-    }
-
-    if pass_char.up_case {
-        pool_score += 26;
-    }
-
-    if pass_char.special {
-        pool_score += 32;
-    }
+    let pool_score = calculate(&password);
 
     let score: Vec<u64> = vec![
         pool_score.try_into().unwrap(),
@@ -95,6 +79,16 @@ pub fn calculate_entropy(pool_score: Vec<u64>) -> f64 {
     let score: f64 = pool_score[0] as f64;
     let password_length: usize = pool_score[1] as usize; // Update the type to usize
 
-    let entropy: f64 = (score.powf(password_length as f64)).log2();
-    entropy.round()
+    let mut entropy: f64 = (score.powf(password_length as f64)).log2();
+    entropy = round(entropy, 2);
+    entropy
+}
+
+fn check_if_pwned(password: String) {
+    let pass_check = pass_check(password.to_string());
+
+    match pass_check {
+        Ok(()) => println!("Password has been pwned!"),
+        Err(..) => println!("Password has not been pwned!"),
+    }
 }
