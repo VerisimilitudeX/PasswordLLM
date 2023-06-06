@@ -7,4 +7,7 @@ edition = "2021"
 
 [dependencies]
 regex = "1.8.3"
-
+sha1 = "0.10.5"
+anyhow = "1.0.71"
+rpassword = "7.2"
+try-catch = "0.2.2"
