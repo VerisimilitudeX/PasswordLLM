@@ -22,8 +22,8 @@ To install RealPass, follow these steps:
 
 To use RealPass, run the `realpass` command and specify the password you want to test. For example:
 
-```shell
-$ realpass mypassword
+```pwsh
+$ ./RealPass-x64 mypassword
 ```
 
 
