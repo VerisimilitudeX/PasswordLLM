@@ -1,5 +1,5 @@
-mod test;
-use std::env::{self};
+mod tests;
+use std::env;
 use regex::Regex;
 mod utils;
 use utils::PwnedAPI::pass_check;
@@ -73,11 +73,10 @@ pub fn calculate_entropy(pool_score: Vec<u64>) -> f64 {
     entropy
 }
 
-fn check_if_pwned(password: String) {
-    let pass_check = pass_check(password);
-
-    match pass_check {
-        Ok(()) => println!("Password has been pwned!"),
-        Err(..) => println!("Password has not been pwned!"),
+pub fn check_if_pwned(password: String) -> u64 {
+    let times_discovered = pass_check(&password);
+    if times_discovered > 0 {
+        println!("Password has been discovered {} times.", times_discovered); 
     }
+    times_discovered
 }
