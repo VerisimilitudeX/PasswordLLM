@@ -1,9 +1,14 @@
 mod tests;
 use std::env;
+use std::fs::File;
 use regex::Regex;
 mod utils;
 use utils::PwnedAPI::pass_check;
 use round::round;
+use std::io::{BufRead, BufReader, Result, Write, Read};
+use std::io;
+use std::fs;
+//use tokio;
 // Entire file calculates the entropy
 
 pub fn main(){
@@ -18,7 +23,12 @@ pub fn main(){
 
     let pool_size = get_pool_size(password.to_string());
     let entropy = calculate_entropy(pool_size);
+    let Dict_Attack: bool = password_list(password.clone());
     check_if_pwned(password);
+
+    if Dict_Attack == true {
+        println!("\n EEEEEEEK");
+    }
 
     match entropy as i64 {
         strength if strength < 80 => println!("Password strength: Weak"),
@@ -28,6 +38,9 @@ pub fn main(){
     }
     
     println!("Entropy: {} bits", entropy);
+    println!("\nPress ENTER to exit...");
+
+    io::stdin().read_line(&mut String::new()).unwrap();
 }
 
 // Pool size based on https://github.com/Kush-munot/Password-Strength-Checker
@@ -79,4 +92,31 @@ pub fn check_if_pwned(password: String) -> u64 {
         println!("Password has been discovered {} times.", times_discovered); 
     }
     times_discovered
+}
+
+fn password_list(password: String) -> bool {
+    let dir = env::current_dir().unwrap();
+    let paths: fs::ReadDir = fs::read_dir(dir).unwrap();
+
+    for file in paths {
+        if file.unwrap().file_name() == "test"
+         {
+            println!("Found test!");
+            
+            //let myfile = *file.unwrap().path();
+            let file_path = *file.unwrap().path();
+            let file = File::open(file_path);
+            let mut reader = BufReader::new(file.unwrap());
+            let mut line = String::new();
+            reader.read_to_string(&mut line);
+
+            for passwords in line.lines() {
+                if passwords == password {
+                    println!("Password found in test!");
+                    return true;
+                }
+            }
+        }
+    }
+    return false;   
 }
