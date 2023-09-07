@@ -29,6 +29,7 @@ pub fn main(){
     if Dict_Attack == true {
         println!("\n EEEEEEEK");
     }
+    else {println!("falseee");}
 
     match entropy as i64 {
         strength if strength < 80 => println!("Password strength: Weak"),
@@ -99,24 +100,31 @@ fn password_list(password: String) -> bool {
     let paths: fs::ReadDir = fs::read_dir(dir).unwrap();
 
     for file in paths {
-        if file.unwrap().file_name() == "test"
+        let file = file.unwrap();
+        if file.file_name() == "RockYou.lnk"
          {
             println!("Found test!");
             
-            //let myfile = *file.unwrap().path();
-            let file_path = *file.unwrap().path();
-            let file = File::open(file_path);
+            let file = File::open(file.path());
             let mut reader = BufReader::new(file.unwrap());
-            let mut line = String::new();
-            reader.read_to_string(&mut line);
+            // mut file_content = Vec::new();
 
-            for passwords in line.lines() {
-                if passwords == password {
-                    println!("Password found in test!");
-                    return true;
+            for passwords in reader.lines() {
+                println!("jhjhj {:?}", passwords);
+                match passwords {
+                    Ok(passwords) => {
+                        if passwords == password {
+                            println!("Password found in test!");
+                            return true;
+                        }
+                    }
+                    Err(err) => {
+                        eprintln!("Error reading line: {}", err);
+                    }
+                    }
                 }
+
             }
         }
+        return false;
     }
-    return false;   
-}
