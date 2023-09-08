@@ -1,18 +1,14 @@
 [package]
 name = "RealPass"
-version = "0.10.2"
+version = "0.2.6"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 regex = "1.8.3"
-sha1 = "0.10.5"
-anyhow = "1.0.71"
-rpassword = "7.2"
-reqwest = { version = "0.11", features = ["json"] }
-tokio = { version = "1.28.2", features = ["full"] }
-hex = "0.4.3"
 round = "0.1.2"
-clippy = "0.0.302"
+rpassword = "7.2"
+tokio = { version = "1.28.2", features = ["full"] }
 pwned = { git = "https://github.com/wisespace-io/pwned-rs.git" }
+lnk = "0.5.1"
