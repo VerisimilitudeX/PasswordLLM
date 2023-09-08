@@ -7,7 +7,9 @@ use utils::PwnedAPI::pass_check;
 use round::round;
 use std::io::{BufRead, BufReader, Result, Write, Read};
 use std::io;
+use std::os::windows::fs::FileExt;
 use std::fs;
+use lnk::ShellLink;
 //use tokio;
 // Entire file calculates the entropy
 
@@ -100,31 +102,39 @@ fn password_list(password: String) -> bool {
     let paths: fs::ReadDir = fs::read_dir(dir).unwrap();
 
     for file in paths {
-        let file = file.unwrap();
+        let mut file = file.unwrap();
         if file.file_name() == "RockYou.lnk"
          {
-            println!("Found test!");
+            let test = lnk::ShellLink::open(file.path()).unwrap();
+            println!("test: {:#?}", test);
+            //if file.path().to_string_lossy(). {
+                println!("Found symlink!");
+                let file = file.path().canonicalize().unwrap();
             
-            let file = File::open(file.path());
-            let mut reader = BufReader::new(file.unwrap());
-            // mut file_content = Vec::new();
+                println!("Symlink: {:?}", file);
+                let file = File::open(file);
+                let reader = BufReader::new(file.unwrap());
 
-            for passwords in reader.lines() {
-                println!("jhjhj {:?}", passwords);
-                match passwords {
-                    Ok(passwords) => {
-                        if passwords == password {
-                            println!("Password found in test!");
-                            return true;
+                for passwords in reader.lines() {
+                    println!("jhjhj {:?}", passwords);
+                    match passwords {
+                        Ok(passwords) => {
+                            if passwords == password {
+                                println!("Password found in test!");
+                                return true;
+                            }
                         }
-                    }
-                    Err(err) => {
-                        eprintln!("Error reading line: {}", err);
-                    }
-                    }
+                        Err(err) => {
+                            eprintln!("Error reading line: {}", err);
+                        }
                 }
-
             }
+            
+            }
+        //}
+        else {
+            println!("Couldn't find symlink!");
         }
-        return false;
     }
+    return false;
+}
