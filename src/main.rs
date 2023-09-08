@@ -25,12 +25,12 @@ pub async fn main(){
 
     let pool_size = get_pool_size(password.to_string());
     let entropy = calculate_entropy(pool_size);
-    let Rockyou = timeout(Duration::from_secs(100), password_list(password.clone())).await;
+    let Rockyou = timeout(Duration::from_secs(10), password_list(password.clone())).await;
 
     check_if_pwned(password);
 
     if Rockyou.ok() == Some(true) {
-        println!("\n Your password can be easily cracked due to dictonary-based bruteforcing attacks. Change it now!");
+        println!("\nYour password can be easily cracked due to dictonary-based bruteforcing attacks. Change it now!");
     }
     else {println!("falseee");}
 
