@@ -5,11 +5,9 @@ use regex::Regex;
 mod utils;
 use utils::PwnedAPI::pass_check;
 use round::round;
-use std::io::{BufRead, BufReader, Result, Write, Read};
-use std::io;
-use std::os::windows::fs::FileExt;
 use std::fs;
-use lnk::ShellLink;
+use std::io::{BufRead, BufReader};
+use std::io;
 //use tokio;
 // Entire file calculates the entropy
 
@@ -105,8 +103,7 @@ fn password_list(password: String) -> bool {
         let mut file = file.unwrap();
         if file.file_name() == "RockYou.lnk"
          {
-            let test = lnk::ShellLink::open(file.path()).unwrap();
-            println!("test: {:#?}", test);
+
             //if file.path().to_string_lossy(). {
                 println!("Found symlink!");
                 let file = file.path().canonicalize().unwrap();
