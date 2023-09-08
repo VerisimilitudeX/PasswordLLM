@@ -22,12 +22,12 @@ mod test {
         }
     }
     
-    #[test]
-    fn pwned_test() {
+    #[tokio::test] 
+    async fn pwned_test() {
         use crate::check_if_pwned;
         
         for &(passcode, _, _, expected_count) in TEST_CASES {
-            let count = check_if_pwned(passcode.to_string());
+            let count = check_if_pwned(passcode.to_string()).await;
             assert!(count >= expected_count as u64, "Count should be greater than or equal to expected_count");
         }
     }

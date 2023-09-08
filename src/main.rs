@@ -1,6 +1,7 @@
 mod tests;
 use std::env;
 use std::fs::File;
+use std::path::Path;
 use regex::Regex;
 mod utils;
 use utils::PwnedAPI::pass_check;
@@ -8,10 +9,11 @@ use round::round;
 use std::fs;
 use std::io::{BufRead, BufReader};
 use std::io;
-//use tokio;
+use tokio::{time::timeout, time::Duration};
 // Entire file calculates the entropy
 
-pub fn main(){
+#[tokio::main]
+pub async fn main(){
     let args: Vec<String> = env::args().collect();
     let password;
 
@@ -23,11 +25,12 @@ pub fn main(){
 
     let pool_size = get_pool_size(password.to_string());
     let entropy = calculate_entropy(pool_size);
-    let Dict_Attack: bool = password_list(password.clone());
+    let Rockyou = timeout(Duration::from_secs(10), password_list(password.clone())).await;
+
     check_if_pwned(password);
 
-    if Dict_Attack == true {
-        println!("\n EEEEEEEK");
+    if Rockyou.ok() == Some(true) {
+        println!("\nYour password can be easily cracked due to dictonary-based bruteforcing attacks. Change it now!");
     }
     else {println!("falseee");}
 
@@ -87,15 +90,15 @@ pub fn calculate_entropy(pool_score: Vec<u64>) -> f64 {
     entropy
 }
 
-pub fn check_if_pwned(password: String) -> u64 {
-    let times_discovered = pass_check(&password);
+pub async fn check_if_pwned(password: String) -> u64 {
+    let times_discovered = pass_check(&password).await;
     if times_discovered > 0 {
         println!("Password has been discovered {} times.", times_discovered); 
     }
     times_discovered
 }
 
-fn password_list(password: String) -> bool {
+async fn password_list(password: String) -> bool {
     let dir = env::current_dir().unwrap();
     let paths: fs::ReadDir = fs::read_dir(dir).unwrap();
 
@@ -103,22 +106,24 @@ fn password_list(password: String) -> bool {
         let mut file = file.unwrap();
         if file.file_name() == "RockYou.lnk"
          {
-
             //if file.path().to_string_lossy(). {
-                println!("Found symlink!");
-                let file = file.path().canonicalize().unwrap();
-            
-                println!("Symlink: {:?}", file);
+                //println!("file: {}", file.path().to_string_lossy());
+                //let file = fs::canonicalize(file.path()).unwrap();
+                //println!("Symlink: {:?}", file.to_string_lossy());
+                let file = Path::new(r"C:\Users\Rick1\AppData\Local\Temp\tmpB9B5.tmp");
+
                 let file = File::open(file);
                 let reader = BufReader::new(file.unwrap());
 
                 for passwords in reader.lines() {
-                    println!("jhjhj {:?}", passwords);
                     match passwords {
                         Ok(passwords) => {
                             if passwords == password {
-                                println!("Password found in test!");
+                                println!("Password {} found in test!", password);
                                 return true;
+                            }
+                            else {
+                                println!("{:?}", passwords);
                             }
                         }
                         Err(err) => {
