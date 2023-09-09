@@ -32,12 +32,17 @@ pub async fn main(){
 
     check_if_pwned(password);
     match rockyou {
-        Ok(rockyou) => {
-            if rockyou.unwrap() {
-                println!("Bruteforce Diagnostic: Your password can be easily cracked due to dictonary-based bruteforcing attacks. Change it now!"); 
+        Ok(x) => {
+            if x.is_ok() {
+                if x.unwrap() {
+                    println!("Bruteforce Diagnostic: Your password can be easily cracked due to dictonary-based bruteforcing attacks. Change it now!"); 
+                }
+                else {
+                    println!("\nYour password is not in the RockYou.txt password list. Good job!");
+                }
             }
             else {
-                println!("\nYour password is not in the RockYou.txt password list. Good job!");
+                println!("\nRockYou.txt not found.");
             }
         }
         Err(_) => {
@@ -167,6 +172,7 @@ async fn password_list(password: String) -> Result<bool, ()> {
                 return Err(());
             }
         }
+        return Err(());
     }
     Err(())
 }
