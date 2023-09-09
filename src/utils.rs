@@ -1,5 +1,4 @@
-pub mod PwnedAPI {
-    #[tokio::main(flavor = "current_thread")]
+pub mod pwned_api {
     pub async fn pass_check(password: &str) -> u64 {
         let pwned_api = pwned::api::PwnedBuilder::default().build().unwrap();
         let request = pwned_api.check_password(password).await;

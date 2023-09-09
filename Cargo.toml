@@ -1,6 +1,6 @@
 [package]
-name = "RealPass"
-version = "0.2.6"
+name = "PasswordGPT"
+version = "0.3.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -11,3 +11,4 @@ round = "0.1.2"
 rpassword = "7.2"
 tokio = { version = "1.28.2", features = ["full"] }
 pwned = { git = "https://github.com/wisespace-io/pwned-rs.git" }
+parselnk = "0.1.1"
