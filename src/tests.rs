@@ -22,6 +22,7 @@ mod test {
         }
     }
     #[tokio::test]
+    #[cfg(target_os = "windows")]
     async fn test_password_list() {
         use crate::password_list;
         
