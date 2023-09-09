@@ -12,7 +12,6 @@ use std::io;
 use tokio::{time::timeout, time::Duration};
 use parselnk::Lnk;
 
-// Entire file calculates the entropy
 #[allow(unused_must_use)]
 
 #[tokio::main]
@@ -28,25 +27,28 @@ pub async fn main() {
 
     let pool_size = get_pool_size(password.to_string());
     let entropy = calculate_entropy(pool_size);
-    let rockyou = timeout(Duration::from_secs(100), password_list(password.clone())).await;
-
+    let rockyou = timeout(Duration::from_secs(60), password_list(password.clone())).await;
+    //let elapsed = rockyou.unwrap();
     check_if_pwned(password);
-    match rockyou {
+    match rockyou{
         Ok(x) => {
-            if x.is_ok() {
-                if x.unwrap() {
-                    println!("Bruteforce Diagnostic: Your password can be easily cracked due to dictonary-based bruteforcing attacks. Change it now!"); 
+            match x {
+                Ok(y) => {
+                    if y {
+                        println!("Bruteforce Diagnostic: Your password can be easily cracked due to dictonary-based bruteforcing attacks. Change it now!"); 
+                    }
+                    else {
+                        println!("\nYour password is not in the RockYou.txt password list. Good job!");
+                    }
                 }
-                else {
-                    println!("\nYour password is not in the RockYou.txt password list. Good job!");
+                Err(p) => {
+                    println!("RockYou not found. {:?}", p);
                 }
             }
-            else {
-                println!("\nRockYou.txt not found.");
-            }
+
         }
-        Err(_) => {
-            println!("\nRockYou.txt not found.");
+        Err(k) => {
+            println!("\nSomething went wrong, timed out, elapsed time: {:?}", k.to_string());
         }
     }
 
@@ -122,7 +124,7 @@ async fn password_list(password: String) -> Result<bool, ()> {
         let file = file.unwrap();
         if file.file_name() == "RockYou.lnk"
          {
-
+            println!("4");
             let file_lnk = file.path();
             let file_lnk: Result<Lnk, _> = Lnk::try_from(file_lnk.as_path());
             let file_lnk: Option<String> = file_lnk.unwrap().link_info.local_base_path;
@@ -155,7 +157,7 @@ async fn password_list(password: String) -> Result<bool, ()> {
                                 //println!("Password {} found in test!", password);
                                 return Ok(true);
                             }
-                            else if counter % 200 == 0 {
+                            else if counter % 8000 == 0 {
                                 println!("Searching...");
                                 counter = 0;
                             }
@@ -172,7 +174,6 @@ async fn password_list(password: String) -> Result<bool, ()> {
                 return Err(());
             }
         }
-        return Err(());
     }
     Err(())
 }
