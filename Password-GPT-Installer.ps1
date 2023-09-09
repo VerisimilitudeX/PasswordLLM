@@ -29,9 +29,12 @@ try {
 $tag = (Invoke-WebRequest $releases | ConvertFrom-Json)[0].tag_name
 $download = "https://github.com/$repo/releases/download/$tag/$file"
 
-Write-Host "Downloading latest release for PasswordGPT..."
-
+if (!(Test-Path -Path ("$dir_path/RealPass-x64.exe") -Path Type Leaf)) {
+Write-Host "Downloading latest release for PasswordGPT to $dir_path/RealPass-x64.exe..."
 Invoke-WebRequest -Uri $download -OutFile "$dir_path/RealPass-x64.exe"
+}
+
+Write-Host "Downloading RockYou password database..."
 Invoke-WebRequest -Uri $RockYou -Out $TempFile
 
 $Rock_You_Path = $TempFile.FullName
@@ -43,8 +46,18 @@ $Shortcut = $WsScriptObj.CreateShortcut($ShortcutPath)
 $Shortcut.TargetPath = $Rock_You_Path
 $Shortcut.Save()
 
-if (Test-Path "$dir_path/RealPass-x64.exe") {
+if (Test-Path "$dir_path\RealPass-x64.exe") {
     Write-Host "Installed sucessfully, running program now!" -ForegroundColor Green
-    Start-Process -FilePath "$dir_path/RealPass-x64.exe"
+    Start-Process -FilePath "$dir_path/RealPass-x64.exe" -Wait
+
+
+    Write-Host "Cleaning up... Deleting temp files"
+    try {
+        Remove-Item $TempFile.FullName
+        Remove-Item $ShortcutPath
+    } catch [System.Exception] {
+        Write-Host "Something went wrong..." -ForegroundColor Red
+        Write-Error $_.Exception.Message
+    }
 }
 
