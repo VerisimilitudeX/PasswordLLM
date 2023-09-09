@@ -4,13 +4,16 @@ use std::fs::File;
 use std::path::Path;
 use regex::Regex;
 mod utils;
-use utils::PwnedAPI::pass_check;
+use utils::pwned_api::pass_check;
 use round::round;
 use std::fs;
 use std::io::{BufRead, BufReader};
 use std::io;
 use tokio::{time::timeout, time::Duration};
+use parselnk::Lnk;
+
 // Entire file calculates the entropy
+#[allow(unused_must_use)]
 
 #[tokio::main]
 pub async fn main(){
@@ -25,14 +28,22 @@ pub async fn main(){
 
     let pool_size = get_pool_size(password.to_string());
     let entropy = calculate_entropy(pool_size);
-    let Rockyou = timeout(Duration::from_secs(10), password_list(password.clone())).await;
+    let rockyou = timeout(Duration::from_secs(100), password_list(password.clone())).await;
 
     check_if_pwned(password);
-
-    if Rockyou.ok() == Some(true) {
-        println!("\nYour password can be easily cracked due to dictonary-based bruteforcing attacks. Change it now!");
+    match rockyou {
+        Ok(rockyou) => {
+            if rockyou.unwrap() == true {
+                println!("Bruteforce Diagnostic: Your password can be easily cracked due to dictonary-based bruteforcing attacks. Change it now!"); 
+            }
+            else {
+                println!("\nYour password is not in the RockYou.txt password list. Good job!");
+            }
+        }
+        Err(_) => {
+            println!("\nRockYou.txt not found.");
+        }
     }
-    else {println!("falseee");}
 
     match entropy as i64 {
         strength if strength < 80 => println!("Password strength: Weak"),
@@ -98,7 +109,7 @@ pub async fn check_if_pwned(password: String) -> u64 {
     times_discovered
 }
 
-async fn password_list(password: String) -> bool {
+async fn password_list(password: String) -> Result<bool, ()> {
     let dir = env::current_dir().unwrap();
     let paths: fs::ReadDir = fs::read_dir(dir).unwrap();
 
@@ -106,37 +117,58 @@ async fn password_list(password: String) -> bool {
         let file = file.unwrap();
         if file.file_name() == "RockYou.lnk"
          {
-            //if file.path().to_string_lossy(). {
-                //println!("file: {}", file.path().to_string_lossy());
-                //let file = fs::canonicalize(file.path()).unwrap();
-                //println!("Symlink: {:?}", file.to_string_lossy());
-                let file = Path::new(r"C:\Users\Rick1\AppData\Local\Temp\tmpB9B5.tmp");
 
+            let file_lnk = file.path();
+            let file_lnk: Result<Lnk, _> = Lnk::try_from(file_lnk.as_path());
+            let file_lnk: Option<String> = file_lnk.unwrap().link_info.local_base_path;
+
+            let file_lnk: String = {
+                match file_lnk {
+                    Some(x) => x,
+                    None => {
+                        panic!("Your shortcut link exists, but it's pointing to a unaccessable file.");
+                    }
+                }
+            };
+            let file = Path::new(&file_lnk);
+            if file.exists() && file.is_file() {
+                println!("Found RockYou.txt located at {}", file.to_string_lossy());
+                tokio::time::sleep(Duration::from_secs(5)).await;
+                
                 let file = File::open(file);
-                let reader = BufReader::new(file.unwrap());
+                let file = file.unwrap();
+                let reader = BufReader::new(file);
 
+                let mut line = 0;
+                let mut counter = 0;
                 for passwords in reader.lines() {
+                    counter+=1;
+                    line+=1;
                     match passwords {
                         Ok(passwords) => {
                             if passwords == password {
-                                println!("Password {} found in test!", password);
-                                return true;
+                                //println!("Password {} found in test!", password);
+                                return Ok(true);
                             }
                             else {
-                                println!("{:?}", passwords);
-                            }
+                                    if counter % 200 == 0 {
+                                        println!("Searching...");
+                                        counter = 0;
+                                    }
+                                }
+                                //println!("{:?}", passwords);
                         }
                         Err(err) => {
-                            eprintln!("Error reading line: {}", err);
+                            println!("Error reading line: {:?}, the error is \"{}\"", line, err);
+                            tokio::time::sleep(Duration::from_secs(1)).await;
                         }
+                    }
                 }
             }
-            
+            else {
+                return Err(());
             }
-        //}
-        else {
-            println!("Couldn't find symlink!");
         }
     }
-    false
+    Err(())
 }
