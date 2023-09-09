@@ -124,7 +124,6 @@ async fn password_list(password: String) -> Result<bool, ()> {
         let file = file.unwrap();
         if file.file_name() == "RockYou.lnk"
          {
-            println!("4");
             let file_lnk = file.path();
             let file_lnk: Result<Lnk, _> = Lnk::try_from(file_lnk.as_path());
             let file_lnk: Option<String> = file_lnk.unwrap().link_info.local_base_path;
