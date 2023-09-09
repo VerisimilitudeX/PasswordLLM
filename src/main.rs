@@ -16,7 +16,7 @@ use parselnk::Lnk;
 #[allow(unused_must_use)]
 
 #[tokio::main]
-pub async fn main(){
+pub async fn main() {
     let args: Vec<String> = env::args().collect();
     let password;
 

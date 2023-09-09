@@ -6,7 +6,7 @@ $dir_path = "$downloads_folder/PasswordGPT"
 $TempFile = New-TemporaryFile
 
 $repo = "VerisimilitudeX/PasswordGPT"
-$file = "RealPass-x64.exe"
+$file = "PasswordGPT-64x.exe"
 $releases = "https://api.github.com/repos/$repo/releases"
 $RockYou = "https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt"
 
@@ -29,9 +29,9 @@ try {
 $tag = (Invoke-WebRequest $releases | ConvertFrom-Json)[0].tag_name
 $download = "https://github.com/$repo/releases/download/$tag/$file"
 
-if (!(Test-Path -Path ("$dir_path/RealPass-x64.exe") -PathType Leaf)) {
-Write-Host "Downloading latest release for PasswordGPT to $dir_path/RealPass-x64.exe..."
-Invoke-WebRequest -Uri $download -OutFile "$dir_path/RealPass-x64.exe"
+if (!(Test-Path -Path ("$dir_path/$file") -PathType Leaf)) {
+Write-Host "Downloading latest release for PasswordGPT to $dir_path/PasswordGPT-64x..."
+Invoke-WebRequest -Uri $download -OutFile "$dir_path/$file"
 }
 
 Write-Host "Downloading RockYou password database..."
@@ -46,9 +46,9 @@ $Shortcut = $WsScriptObj.CreateShortcut($ShortcutPath)
 $Shortcut.TargetPath = $Rock_You_Path
 $Shortcut.Save()
 
-if (Test-Path "$dir_path\RealPass-x64.exe") {
+if (Test-Path "$dir_path\$file") {
     Write-Host "Installed sucessfully, running program now!" -ForegroundColor Green
-    Start-Process -FilePath "$dir_path/RealPass-x64.exe" -Wait
+    Start-Process -FilePath "$dir_path/$file" -Wait
 
 
     Write-Host "Cleaning up... Deleting temp files"
