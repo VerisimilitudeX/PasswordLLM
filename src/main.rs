@@ -62,11 +62,11 @@ pub fn get_pool_size(password: String) -> Vec<u64> {
             pool_score += 26;
         }
 
-        if Regex::new(r#"[\d]"#).unwrap().is_match(password) {
+        if Regex::new(r"[\d]").unwrap().is_match(password) {
             pool_score += 10
         }
         // Updates password_characteristics struct with bool values if password contains digits
-        if Regex::new(r#"[^A-Za-z0-9\s]"#).unwrap().is_match(password) {
+        if Regex::new(r"[^A-Za-z0-9\s]").unwrap().is_match(password) {
             pool_score += 32;
         }
         pool_score
@@ -103,7 +103,7 @@ async fn password_list(password: String) -> bool {
     let paths: fs::ReadDir = fs::read_dir(dir).unwrap();
 
     for file in paths {
-        let mut file = file.unwrap();
+        let file = file.unwrap();
         if file.file_name() == "RockYou.lnk"
          {
             //if file.path().to_string_lossy(). {
@@ -138,5 +138,5 @@ async fn password_list(password: String) -> bool {
             println!("Couldn't find symlink!");
         }
     }
-    return false;
+    false
 }
