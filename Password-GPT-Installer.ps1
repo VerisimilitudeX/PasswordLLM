@@ -10,7 +10,7 @@ $file = "RealPass-x64.exe"
 $releases = "https://api.github.com/repos/$repo/releases"
 $RockYou = "https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt"
 
-$ErrorActionPreference = 'SilentlyContinue' 
+#$ErrorActionPreference = 'SilentlyContinue' 
 $ProgressPreference = 'SilentlyContinue'  # adds increased downloading speed
 
 try {
@@ -29,7 +29,7 @@ try {
 $tag = (Invoke-WebRequest $releases | ConvertFrom-Json)[0].tag_name
 $download = "https://github.com/$repo/releases/download/$tag/$file"
 
-if (!(Test-Path -Path ("$dir_path/RealPass-x64.exe") -Path Type Leaf)) {
+if (!(Test-Path -Path ("$dir_path/RealPass-x64.exe") -PathType Leaf)) {
 Write-Host "Downloading latest release for PasswordGPT to $dir_path/RealPass-x64.exe..."
 Invoke-WebRequest -Uri $download -OutFile "$dir_path/RealPass-x64.exe"
 }
