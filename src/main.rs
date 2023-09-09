@@ -33,7 +33,7 @@ pub async fn main(){
     check_if_pwned(password);
     match rockyou {
         Ok(rockyou) => {
-            if rockyou.unwrap() == true {
+            if rockyou.unwrap() {
                 println!("Bruteforce Diagnostic: Your password can be easily cracked due to dictonary-based bruteforcing attacks. Change it now!"); 
             }
             else {
@@ -150,12 +150,10 @@ async fn password_list(password: String) -> Result<bool, ()> {
                                 //println!("Password {} found in test!", password);
                                 return Ok(true);
                             }
-                            else {
-                                    if counter % 200 == 0 {
-                                        println!("Searching...");
-                                        counter = 0;
-                                    }
-                                }
+                            else if counter % 200 == 0 {
+                                println!("Searching...");
+                                counter = 0;
+                            }
                                 //println!("{:?}", passwords);
                         }
                         Err(err) => {
