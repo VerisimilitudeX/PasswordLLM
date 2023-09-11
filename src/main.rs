@@ -1,9 +1,12 @@
+#[allow(unused_must_use)]
+#[allow(non_snake_case)]
+
 mod tests;
+mod utils;
 use std::env;
 use std::fs::File;
 use std::path::Path;
 use regex::Regex;
-mod utils;
 use utils::pwned_api::pass_check;
 use round::round;
 use std::fs;
@@ -11,8 +14,6 @@ use std::io::{BufRead, BufReader};
 use std::io;
 use tokio::{time::timeout, time::Duration};
 use parselnk::Lnk;
-
-#[allow(unused_must_use)]
 
 #[tokio::main]
 pub async fn main() {
@@ -28,8 +29,9 @@ pub async fn main() {
     let pool_size = get_pool_size(password.to_string());
     let entropy = calculate_entropy(pool_size);
     let rockyou = timeout(Duration::from_secs(60), password_list(password.clone())).await;
-    //let elapsed = rockyou.unwrap();
-    check_if_pwned(password);
+
+    check_if_pwned(password).await;
+
     match rockyou{
         Ok(x) => {
             match x {
