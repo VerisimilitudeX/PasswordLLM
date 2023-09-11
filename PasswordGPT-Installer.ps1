@@ -1,11 +1,11 @@
 # Specify the downloads folder
 $downloads_folder = (New-Object -ComObject Shell.Application).NameSpace('shell:Downloads').Self.Path
 # Set the path for the DNAnalyzer directory in the downloads folder
-$dir_path = "$downloads_folder/PasswordGPT"
+$dir_path = "$downloads_folder/PasswordLLM"
 # Creates a temporary windows progam file
 $TempFile = New-TemporaryFile
 
-$repo = "VerisimilitudeX/PasswordGPT"
+$repo = "VerisimilitudeX/PasswordLLM"
 $file = "PasswordGPT-64x.exe"
 $releases = "https://api.github.com/repos/$repo/releases"
 $RockYou = "https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt"
