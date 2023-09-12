@@ -6,7 +6,6 @@ mod utils;
 use std::env;
 use std::fs::File;
 use std::path::Path;
-use regex::Regex;
 use utils::pwned_api::pass_check;
 use round::round;
 use std::fs;
@@ -14,6 +13,7 @@ use std::io::{BufRead, BufReader};
 use std::io;
 use tokio::{time::timeout, time::Duration};
 use parselnk::Lnk;
+use regex::Regex;
 
 #[tokio::main]
 pub async fn main() {
@@ -26,32 +26,38 @@ pub async fn main() {
         password = rpassword::prompt_password("Password: ").unwrap();
     }
 
-    let pool_size = get_pool_size(password.to_string());
+    let pool_size = get_pool_size(password.clone());
     let entropy = calculate_entropy(pool_size);
-    let rockyou = timeout(Duration::from_secs(60), password_list(password.clone())).await;
+    let alphabet_match = regex_match(password.clone());
 
-    check_if_pwned(password).await;
+    check_if_pwned(password.clone()).await;
 
-    match rockyou{
-        Ok(x) => {
-            match x {
-                Ok(y) => {
-                    if y {
-                        println!("Bruteforce Diagnostic: Your password can be easily cracked due to dictonary-based bruteforcing attacks. Change it now!"); 
+    if alphabet_match == false {
+        let rockyou = timeout(Duration::from_secs(60), password_list(password.clone())).await;
+        match rockyou{
+            Ok(x) => {
+                match x {
+                    Ok(y) => {
+                        if y {
+                            println!("Bruteforce Diagnostic: Your password can be easily cracked due to dictonary-based bruteforcing attacks. Change it now!"); 
+                        }
+                        else {
+                            println!("\nYour password is not in the RockYou.txt password list. Good job!");
+                        }
                     }
-                    else {
-                        println!("\nYour password is not in the RockYou.txt password list. Good job!");
+                    Err(p) => {
+                        println!("RockYou not found. {:?}", p);
                     }
                 }
-                Err(p) => {
-                    println!("RockYou not found. {:?}", p);
-                }
+
             }
-
+            Err(k) => {
+                println!("\nSomething went wrong, timed out, elapsed time: {:?}", k.to_string());
+            }
         }
-        Err(k) => {
-            println!("\nSomething went wrong, timed out, elapsed time: {:?}", k.to_string());
-        }
+    }
+    else {
+        println!("\n Your password is incredibly easy to bruteforce, it is less than 3 characters are only contacts alphabetic characters.")
     }
 
     match entropy as i64 {
@@ -177,4 +183,15 @@ async fn password_list(password: String) -> Result<bool, ()> {
         }
     }
     Err(())
+}
+
+fn regex_match(password: String) -> bool {
+    let regex = Regex::new(r"[a-zA-Z]").unwrap();
+
+    if password.len() < 3 {
+        if regex.is_match(&password) {
+            return true;
+        }
+    }
+    return false;
 }

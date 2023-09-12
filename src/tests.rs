@@ -2,9 +2,9 @@
 mod test {    
     // Test cases with different passcodes
     static TEST_CASES: &[(&str, u64, i64, u32, bool)] = &[
-        ("password", 26, 38, 9659365, true),     // Pool size: 26 (low_case) + 10 (digits), Entropy: 38, bool: True
-        ("Password123", 62, 66, 47708, true),  // Pool size: 26 (low_case) + 26 (up_case) + 10 (digits), Entropy: 65, bool: True
-        ("!@#123", 42, 32, 1259, true),       // Pool size: 26 (low_case) + 26 (up_case) + 10 (digits) + 6 (special), Entropy: 32, bool: True
+        ("password", 26, 38, 9659365, true),     // Pool size: 26 (low_case) + 10 (digits), Entropy: 38, rockyoupasswordlist: True
+        ("Password123", 62, 66, 47708, true),  // Pool size: 26 (low_case) + 26 (up_case) + 10 (digits), Entropy: 65, rockyoupasswordlist: True
+        ("!@#123", 42, 32, 1259, true),       // Pool size: 26 (low_case) + 26 (up_case) + 10 (digits) + 6 (special), Entropy: 32, rockyoupasswordlist: True
     ]; // password string, pool size, entropy, expected database count
 
     #[test]
