@@ -1,7 +1,7 @@
-# PasswordGPT (formerly RealPass)
+# PasswordLLM (formerly RealPass)
 Is your password **_strong_** or just **_wrong_**? A free and open source program to test your password against realistic and real-world scenarios.
 
-RealPass is a free and open source password testing tool that uses realistic and real-world scenarios to evaluate the strength of your passwords.
+PasswordLLM is a free and open source password testing tool that uses realistic and real-world scenarios to evaluate the strength of your passwords.
 
 ## Features
 
@@ -12,14 +12,14 @@ RealPass is a free and open source password testing tool that uses realistic and
 
 ## Installation
 
-To install PasswordGPT, follow these steps:
+To install PasswordLLM, follow these steps:
 
-1. Download the latest release from the [PasswordGPT releases page](https://github.com/VerisimilitudeX/PasswordGPT/releases).
+1. Download the latest release from the [PasswordLLM releases page](https://github.com/VerisimilitudeX/PasswordLLM/releases).
 2. Extract the downloaded archive.
 
 ## Usage
 
-To use PasswordGPT, run the Powershell installer script by right clicking it and pressing "Run with Powershell" Or for an offline-mode, run the "PasswordGPT-64x.exe" file.
+To use PasswordLLM, run the Powershell installer script by right clicking it and pressing "Run with Powershell" Or for an offline-mode, run the "PasswordGPT-64x.exe" file.
 
 PasswordGPT will then evaluate the password and display the estimated time it would take an attacker to guess it. It will also provide suggestions for improving the strength of your password.
 
