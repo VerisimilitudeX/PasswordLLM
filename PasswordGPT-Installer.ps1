@@ -30,7 +30,7 @@ $tag = (Invoke-WebRequest $releases | ConvertFrom-Json)[0].tag_name
 $download = "https://github.com/$repo/releases/download/$tag/$file"
 
 if (!(Test-Path -Path ("$dir_path/$file") -PathType Leaf)) {
-Write-Host "Downloading latest release for PasswordGPT to $dir_path/PasswordGPT-64x..."
+Write-Host "Downloading latest release for PasswordGPT to $dir_path/$file..."
 Invoke-WebRequest -Uri $download -OutFile "$dir_path/$file"
 }
 
