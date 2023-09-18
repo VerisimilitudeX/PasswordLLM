@@ -32,7 +32,7 @@ pub async fn main() {
 
     check_if_pwned(password.clone()).await;
 
-    if alphabet_match == false {
+    if !alphabet_match {
         let rockyou = timeout(Duration::from_secs(60), password_list(password.clone())).await;
         match rockyou{
             Ok(x) => {
@@ -188,10 +188,8 @@ async fn password_list(password: String) -> Result<bool, ()> {
 fn regex_match(password: String) -> bool {
     let regex = Regex::new(r"[a-zA-Z]").unwrap();
 
-    if password.len() < 3 {
-        if regex.is_match(&password) {
-            return true;
-        }
+    if password.len() < 3 && regex.is_match(&password) {
+        return true;
     }
-    return false;
+    false
 }
