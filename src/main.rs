@@ -135,7 +135,7 @@ async fn password_list(password: String) -> Result<bool, ()> {
             let file_lnk = file.path();
             let file_lnk: Result<Lnk, _> = Lnk::try_from(file_lnk.as_path());
             let file_lnk: Option<String> = file_lnk.unwrap().link_info.local_base_path;
-
+            
             let file_lnk: String = {
                 match file_lnk {
                     Some(x) => x,
@@ -144,6 +144,7 @@ async fn password_list(password: String) -> Result<bool, ()> {
                     }
                 }
             };
+            println!("File : {:?}", file);
             let file = Path::new(&file_lnk);
             if file.exists() && file.is_file() {
                 println!("Found RockYou.txt located at {}", file.to_string_lossy());
@@ -178,10 +179,12 @@ async fn password_list(password: String) -> Result<bool, ()> {
                 }
             }
             else {
+                println!("Error 1, cannot find file {:?}, may not exist or be a file. {:?}", file.to_string_lossy(), file.file_name());
                 return Err(());
             }
         }
     }
+    println!("Error 2");
     Err(())
 }
 

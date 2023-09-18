@@ -33,6 +33,9 @@ if (!(Test-Path -Path ("$dir_path/$file") -PathType Leaf)) {
 Write-Host "Downloading latest release for PasswordGPT to $dir_path/$file..."
 Invoke-WebRequest -Uri $download -OutFile "$dir_path/$file"
 }
+else {
+    Write-Host "Executable already exists, not downloading again!"
+}
 
 Write-Host "Downloading RockYou password database..."
 Invoke-WebRequest -Uri $RockYou -Out $TempFile
