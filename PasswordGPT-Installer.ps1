@@ -6,7 +6,7 @@ $dir_path = "$downloads_folder/PasswordLLM"
 $TempFile = New-TemporaryFile
 
 $repo = "VerisimilitudeX/PasswordLLM"
-$file = "PasswordGPT-64x.exe"
+$file = "PasswordLLM-64x.exe"
 $releases = "https://api.github.com/repos/$repo/releases"
 $RockYou = "https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt"
 
