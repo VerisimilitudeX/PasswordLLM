@@ -26,4 +26,4 @@ PasswordGPT will then evaluate the password and display the estimated time it wo
 ## License
 MIT
 
-###### Note: This software is a joint collaboration between @Verisimilitude11 and @LimesKey. 
+###### Note: This software is a joint collaboration between @LimesKey & @VerisimilitudeX.
