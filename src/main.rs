@@ -126,9 +126,9 @@ pub async fn check_if_pwned(password: String) -> u64 {
 
 async fn password_list(password: String) -> Result<bool, ()> {
     let dir = env::current_dir().unwrap();
-    let paths: fs::ReadDir = fs::read_dir(dir).unwrap();
+    let directory: fs::ReadDir = fs::read_dir(dir).unwrap();
 
-    for file in paths {
+    for file in directory {
         let file = file.unwrap();
         if file.file_name() == "RockYou.lnk"
          {
@@ -144,7 +144,6 @@ async fn password_list(password: String) -> Result<bool, ()> {
                     }
                 }
             };
-            println!("File : {:?}", file);
             let file = Path::new(&file_lnk);
             if file.exists() && file.is_file() {
                 println!("Found RockYou.txt located at {}", file.to_string_lossy());
@@ -162,26 +161,29 @@ async fn password_list(password: String) -> Result<bool, ()> {
                     match passwords {
                         Ok(passwords) => {
                             if passwords == password {
-                                //println!("Password {} found in test!", password);
                                 return Ok(true);
                             }
                             else if counter % 8000 == 0 {
                                 println!("Searching...");
                                 counter = 0;
                             }
-                                //println!("{:?}", passwords);
                         }
                         Err(err) => {
                             println!("Error reading line: {:?}, the error is \"{}\"", line, err);
                             tokio::time::sleep(Duration::from_secs(1)).await;
                         }
                     }
+                    if line >= 2459760 {
+                        return Ok(false);
+                    }
                 }
             }
             else {
-                println!("Error 1, cannot find file {:?}, may not exist or be a file. {:?}", file.to_string_lossy(), file.file_name());
+                println!("Error 1, cannot find correct source file: {:?}, may not exist or be a file. {:?}", file.to_string_lossy(), file.file_name());
                 return Err(());
             }
+            println!("Error 3");
+            println!("{:?}", file.file_name());
         }
     }
     println!("Error 2");

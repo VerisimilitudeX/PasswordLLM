@@ -26,6 +26,7 @@ try {
     Write-Host "Something went wrong..." -ForegroundColor Red
     Write-Error $_.Exception.Message
 }
+Write-Host "Checking latest release of program..."
 $tag = (Invoke-WebRequest $releases | ConvertFrom-Json)[0].tag_name
 $download = "https://github.com/$repo/releases/download/$tag/$file"
 
@@ -51,8 +52,8 @@ $Shortcut.Save()
 
 if (Test-Path "$dir_path\$file") {
     Write-Host "Installed sucessfully, running program now!" -ForegroundColor Green
-    Start-Process -FilePath "$dir_path/$file" -Wait
-
+    Set-Location -Path $dir_path
+    Start-Process -FilePath "$file" -Wait
 
     Write-Host "Cleaning up... Deleting temp files"
     try {
