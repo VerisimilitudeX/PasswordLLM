@@ -17,22 +17,21 @@ use regex::Regex;
 
 #[tokio::main]
 pub async fn main() {
-    let args: Vec<String> = env::args().collect();
-    let password;
+    let args: Vec<String> = env::args().collect(); // stores arguments in vector
 
-    if args.len() > 1 {
-        password = args[1].clone();
+    let password: String = if args.len() > 1 {
+        args[1].clone()
     } else {
-        password = rpassword::prompt_password("Password: ").unwrap();
-    }
+        rpassword::prompt_password("Password: ").unwrap() // prompts for passwords if no arguments are given
+    };
 
     let pool_size = get_pool_size(password.clone());
-    let entropy = calculate_entropy(pool_size);
+    let entropy = calculate_entropy(pool_size); // calls functions
     let alphabet_match = regex_match(password.clone());
 
     check_if_pwned(password.clone()).await;
 
-    if !alphabet_match {
+    if !alphabet_match { // just a big match statement to check to see if it should call a function
         let rockyou = timeout(Duration::from_secs(60), password_list(password.clone())).await;
         match rockyou{
             Ok(x) => {
@@ -163,7 +162,7 @@ async fn password_list(password: String) -> Result<bool, ()> {
                             if passwords == password {
                                 return Ok(true);
                             }
-                            else if counter % 8000 == 0 {
+                            else if counter % 1000 == 0 { // maybe increase it not sure
                                 println!("Searching...");
                                 counter = 0;
                             }
