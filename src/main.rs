@@ -17,22 +17,21 @@ use regex::Regex;
 
 #[tokio::main]
 pub async fn main() {
-    let args: Vec<String> = env::args().collect();
-    let password;
+    let args: Vec<String> = env::args().collect(); // stores arguments in vector
 
-    if args.len() > 1 {
-        password = args[1].clone();
+    let password: String = if args.len() > 1 {
+        args[1].clone()
     } else {
-        password = rpassword::prompt_password("Password: ").unwrap();
-    }
+        rpassword::prompt_password("Password: ").unwrap() // prompts for passwords if no arguments are given
+    };
 
     let pool_size = get_pool_size(password.clone());
-    let entropy = calculate_entropy(pool_size);
+    let entropy = calculate_entropy(pool_size); // calls functions
     let alphabet_match = regex_match(password.clone());
 
     check_if_pwned(password.clone()).await;
 
-    if !alphabet_match {
+    if !alphabet_match { // just a big match statement to check to see if it should call a function
         let rockyou = timeout(Duration::from_secs(60), password_list(password.clone())).await;
         match rockyou{
             Ok(x) => {
@@ -126,9 +125,9 @@ pub async fn check_if_pwned(password: String) -> u64 {
 
 async fn password_list(password: String) -> Result<bool, ()> {
     let dir = env::current_dir().unwrap();
-    let paths: fs::ReadDir = fs::read_dir(dir).unwrap();
+    let directory: fs::ReadDir = fs::read_dir(dir).unwrap();
 
-    for file in paths {
+    for file in directory {
         let file = file.unwrap();
         if file.file_name() == "RockYou.lnk"
          {
@@ -144,7 +143,6 @@ async fn password_list(password: String) -> Result<bool, ()> {
                     }
                 }
             };
-            println!("File : {:?}", file);
             let file = Path::new(&file_lnk);
             if file.exists() && file.is_file() {
                 println!("Found RockYou.txt located at {}", file.to_string_lossy());
@@ -162,26 +160,29 @@ async fn password_list(password: String) -> Result<bool, ()> {
                     match passwords {
                         Ok(passwords) => {
                             if passwords == password {
-                                //println!("Password {} found in test!", password);
                                 return Ok(true);
                             }
-                            else if counter % 8000 == 0 {
+                            else if counter % 1000 == 0 { // maybe increase it not sure
                                 println!("Searching...");
                                 counter = 0;
                             }
-                                //println!("{:?}", passwords);
                         }
                         Err(err) => {
                             println!("Error reading line: {:?}, the error is \"{}\"", line, err);
                             tokio::time::sleep(Duration::from_secs(1)).await;
                         }
                     }
+                    if line >= 2459760 {
+                        return Ok(false);
+                    }
                 }
             }
             else {
-                println!("Error 1, cannot find file {:?}, may not exist or be a file. {:?}", file.to_string_lossy(), file.file_name());
+                println!("Error 1, cannot find correct source file: {:?}, may not exist or be a file. {:?}", file.to_string_lossy(), file.file_name());
                 return Err(());
             }
+            println!("Error 3");
+            println!("{:?}", file.file_name());
         }
     }
     println!("Error 2");
