@@ -32,7 +32,20 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+
     steps:
+    - name: Load OpenCL
+      run: |
+        wget -qO - https://repositories.intel.com/graphics/intel-graphics.key |
+          sudo apt-key add -
+        sudo add-apt-repository \
+          'deb [arch=amd64] https://repositories.intel.com/graphics/ubuntu focal main'
+        sudo apt-get update
+        sudo apt-get install \
+          intel-opencl-icd \
+          intel-level-zero-gpu level-zero \
+          intel-media-va-driver-non-free libmfx1
+        sudo apt-get install ocl-icd-opencl-dev
     - uses: actions/checkout@v3
     - name: Run tests
       run: cargo test --verbose
