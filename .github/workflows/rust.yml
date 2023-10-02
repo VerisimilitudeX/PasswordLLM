@@ -2,9 +2,9 @@ name: Rust
 
 on:
   push:
-    branches: [ "all" ]
+    branches: [ "main", "master", "GPU-MD5-Crack" ]
   pull_request:
-    branches: [ "all" ]
+    branches: [ "main", "master", "GPU-MD5-Crack" ]
 
 env:
   CARGO_TERM_COLOR: always
