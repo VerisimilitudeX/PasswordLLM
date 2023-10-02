@@ -1,5 +1,5 @@
 #[allow(non_snake_case)]
-#[allow(unused_imports)]
+
 pub mod gpu { 
     use opencl3::device::{get_all_devices, CL_DEVICE_TYPE_GPU};
     use std::io;

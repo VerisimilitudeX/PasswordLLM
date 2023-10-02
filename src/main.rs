@@ -32,7 +32,7 @@ pub async fn main() {
     let pool_size = get_pool_size(password.clone());
     let entropy = calculate_entropy(pool_size); // calls functions
     let alphabet_match = regex_match(password.clone());
-    obtainGPU();
+    obtainGPU(); // todo
 
     check_if_pwned(password.clone()).await;
 
