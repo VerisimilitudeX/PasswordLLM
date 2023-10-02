@@ -8,10 +8,10 @@ pub mod gpu {
         let mut gpu_choice: u32 = 0;
 
         if devices.len() > 1 {
-            while true {
+            loop {
                 println!("You have multiple ({}) GPUs, please select one!", devices.len());
                 for gpu in 0..devices.len() {
-                    let device = devices[gpu].clone();
+                    let device = devices[gpu];
                     let device = opencl3::device::Device::new(device);
                     println!("\tGPU Device {}: {}", gpu, device.name().unwrap());
                 }
@@ -36,7 +36,7 @@ pub mod gpu {
             }
         }
         println!("You have selected GPU Device {}", gpu_choice);
-        let gpu = opencl3::device::Device::new(devices[gpu_choice as usize].clone());
+        let gpu = opencl3::device::Device::new(devices[gpu_choice as usize]);
 
         println!("Your {} has {} CUDA cores and {} stream multiprocessors", gpu.name().unwrap(), gpu.max_compute_units().unwrap(), (gpu.max_compute_units().unwrap() * 8));
         //println!("Device: {:?}", device.name());
