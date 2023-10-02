@@ -3,10 +3,14 @@
 
 mod tests;
 mod utils;
+mod gpu;
+
+use utils::pwned_api::pass_check;
+use gpu::gpu::obtainGPU;
+
 use std::env;
 use std::fs::File;
 use std::path::Path;
-use utils::pwned_api::pass_check;
 use round::round;
 use std::fs;
 use std::io::{BufRead, BufReader};
@@ -28,6 +32,7 @@ pub async fn main() {
     let pool_size = get_pool_size(password.clone());
     let entropy = calculate_entropy(pool_size); // calls functions
     let alphabet_match = regex_match(password.clone());
+    obtainGPU(); // todo
 
     check_if_pwned(password.clone()).await;
 
@@ -172,7 +177,7 @@ async fn password_list(password: String) -> Result<bool, ()> {
                             tokio::time::sleep(Duration::from_secs(1)).await;
                         }
                     }
-                    if line >= 2459760 {
+                    if line >= 2459760 { // if it's at the end of the file, stop the search and return password not found
                         return Ok(false);
                     }
                 }
