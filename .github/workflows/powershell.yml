@@ -1,42 +1,13 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-#
-# https://github.com/microsoft/action-psscriptanalyzer
-# For more information on PSScriptAnalyzer in general, see
-# https://github.com/PowerShell/PSScriptAnalyzer
-
-name: PSScriptAnalyzer
-
-on:
-  push:
-    branches: [ "main", "GPU-MD5-Crack" ]
-  pull_request:
-    branches: [ "main", "GPU-MD5-Crack" ]
-
-permissions:
-  contents: write
-
+name: Run powershell script for PasswordLLM
+on: [push]
 jobs:
   Download_and_Run:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Run PSScriptAnalyzer
-        uses: microsoft/psscriptanalyzer-action@6b2948b1944407914a58661c49941824d149734f
-        with:
-          # Check https://github.com/microsoft/action-psscriptanalyzer for more info about the options.
-          # The below set up runs PSScriptAnalyzer to your entire repository and runs some basic security rules.
-          path: .\
-          recurse: true
-          # Include your own basic security rules. Removing this option will run all the rules
-          includeRule: '"PSAvoidGlobalAliases", "PSAvoidUsingConvertToSecureStringWithPlainText"'
-          output: results.sarif
-
-      # Upload the SARIF file generated in the previous step
-      - name: Upload SARIF results file
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: results.sarif
+        - name: Check out code
+          uses: actions/checkout@v2
+  
+  
+        - name: Run the program
+          shell: pwsh
+          run: .\PasswordLLM-Installer.ps1 $True
