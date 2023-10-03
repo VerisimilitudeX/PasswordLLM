@@ -3,10 +3,16 @@
 
 mod tests;
 mod utils;
+mod gpu;
+mod cal_time;
+
+use utils::pwned_api::pass_check;
+use gpu::gpu::obtainGPU;
+use cal_time::cal_time::cal_time;
+
 use std::env;
 use std::fs::File;
 use std::path::Path;
-use utils::pwned_api::pass_check;
 use round::round;
 use std::fs;
 use std::io::{BufRead, BufReader};
@@ -28,6 +34,8 @@ pub async fn main() {
     let pool_size = get_pool_size(password.clone());
     let entropy = calculate_entropy(pool_size); // calls functions
     let alphabet_match = regex_match(password.clone());
+    let statistics = obtainGPU(); // todo
+    cal_time(statistics.unwrap().into(), entropy);
 
     check_if_pwned(password.clone()).await;
 
@@ -162,7 +170,7 @@ async fn password_list(password: String) -> Result<bool, ()> {
                             if passwords == password {
                                 return Ok(true);
                             }
-                            else if counter % 1000 == 0 { // maybe increase it not sure
+                            else if counter % 4000 == 0 { 
                                 println!("Searching...");
                                 counter = 0;
                             }
@@ -172,7 +180,7 @@ async fn password_list(password: String) -> Result<bool, ()> {
                             tokio::time::sleep(Duration::from_secs(1)).await;
                         }
                     }
-                    if line >= 2459760 {
+                    if line >= 2459760 { // if it's at the end of the file, stop the search and return password not found
                         return Ok(false);
                     }
                 }
@@ -185,7 +193,7 @@ async fn password_list(password: String) -> Result<bool, ()> {
             println!("{:?}", file.file_name());
         }
     }
-    println!("Error 2");
+    println!("File not found, skipping!");
     Err(())
 }
 
