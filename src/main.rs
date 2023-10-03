@@ -4,9 +4,11 @@
 mod tests;
 mod utils;
 mod gpu;
+mod cal_time;
 
 use utils::pwned_api::pass_check;
 use gpu::gpu::obtainGPU;
+use cal_time::cal_time::sap;
 
 use std::env;
 use std::fs::File;
@@ -32,7 +34,8 @@ pub async fn main() {
     let pool_size = get_pool_size(password.clone());
     let entropy = calculate_entropy(pool_size); // calls functions
     let alphabet_match = regex_match(password.clone());
-    obtainGPU(); // todo
+    let result = obtainGPU(); // todo
+    sap(result.unwrap());
 
     check_if_pwned(password.clone()).await;
 

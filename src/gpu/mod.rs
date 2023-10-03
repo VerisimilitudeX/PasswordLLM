@@ -3,9 +3,7 @@
 pub mod gpu { 
     use opencl3::device::{get_all_devices, CL_DEVICE_TYPE_GPU};
     use std::io;
-    use crate::round;
-
-    pub fn obtainGPU<T>() -> Result<u32, T> {
+    pub fn obtainGPU() -> Result<u32, ()> {
         let devices: Vec<*mut std::ffi::c_void> = get_all_devices(CL_DEVICE_TYPE_GPU).expect("Cannot detect a GPU!");
         let mut gpu_choice: u32 = 0;
 
@@ -44,11 +42,13 @@ pub mod gpu {
         let gpu_cores = gpu_cores.unwrap(); // use ?
         let gpu_cores = gpu_cores * 8;
 
-        let gpu_gflops: u32 = gpu_clock * gpu_cores * 2;
+        let gpu_gflops_FP32: u32 = (gpu_clock * gpu_cores * 2) / 1000;
+        let gpu_gflops_FP64 = (((gpu_clock * gpu_cores * 2) / 4) / 1000);
 
         println!("Your GPU has a clock speed of {} MHz", gpu_clock);
         println!("Your {} has {} CUDA cores and {} stream multiprocessors", gpu.name().unwrap(), gpu.max_compute_units().unwrap(), (gpu.max_compute_units().unwrap() * 8));
-        println!("This GPU has {} GFLOPS for FP32!", gpu_gflops.to_string()); // todo format properly
-        Ok(gpu_gflops)
+        println!("This GPU has {} GFLOPS for FP32!", gpu_gflops_FP32.to_string()); // todo format properly
+        println!("Or {} GFLOPS for FP64!", gpu_gflops_FP64);
+        Ok(gpu_gflops_FP64)
     }
 }
