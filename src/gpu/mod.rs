@@ -46,7 +46,7 @@ pub mod gpu {
         let gpu_gflops_FP64 = (((gpu_clock * gpu_cores * 2) / 4) / 1000);
 
         println!("Your GPU has a clock speed of {} MHz", gpu_clock);
-        println!("Your {} has {} CUDA cores and {} stream multiprocessors", gpu.name().unwrap(), gpu.max_compute_units().unwrap(), (gpu.max_compute_units().unwrap() * 8));
+        println!("Your {} has {} CUDA cores or {} stream multiprocessors", gpu.name().unwrap(), gpu.max_compute_units().unwrap(), (gpu.max_compute_units().unwrap() * 8));
         println!("This GPU has {} GFLOPS for FP32!", gpu_gflops_FP32.to_string()); // todo format properly
         println!("Or {} GFLOPS for FP64!", gpu_gflops_FP64);
         Ok(gpu_gflops_FP64)

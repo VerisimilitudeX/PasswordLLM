@@ -170,7 +170,7 @@ async fn password_list(password: String) -> Result<bool, ()> {
                             if passwords == password {
                                 return Ok(true);
                             }
-                            else if counter % 500 == 0 { 
+                            else if counter % 4000 == 0 { 
                                 println!("Searching...");
                                 counter = 0;
                             }
