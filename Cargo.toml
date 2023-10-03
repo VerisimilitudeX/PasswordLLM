@@ -13,3 +13,4 @@ pwned = { git = "https://github.com/wisespace-io/pwned-rs.git" }
 parselnk = "0.1.1"
 regex = "1.9.5"
 opencl3 = "0.9.3"
+thousands = "0.2.0"
