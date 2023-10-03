@@ -32,14 +32,3 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: results.sarif
-
-  RunProgram:
-    runs-on: windows-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-
-
-      - name: Run the program
-        shell: pwsh
-        run: .\PasswordLLM-Installer.ps1
