@@ -8,7 +8,7 @@ mod cal_time;
 
 use utils::pwned_api::pass_check;
 use gpu::gpu::obtainGPU;
-use cal_time::cal_time::sap;
+use cal_time::cal_time::cal_time;
 
 use std::env;
 use std::fs::File;
@@ -34,8 +34,8 @@ pub async fn main() {
     let pool_size = get_pool_size(password.clone());
     let entropy = calculate_entropy(pool_size); // calls functions
     let alphabet_match = regex_match(password.clone());
-    let result = obtainGPU(); // todo
-    sap(result.unwrap());
+    let statistics = obtainGPU(); // todo
+    cal_time(statistics.unwrap().into(), entropy);
 
     check_if_pwned(password.clone()).await;
 
@@ -170,7 +170,7 @@ async fn password_list(password: String) -> Result<bool, ()> {
                             if passwords == password {
                                 return Ok(true);
                             }
-                            else if counter % 1000 == 0 { // maybe increase it not sure
+                            else if counter % 500 == 0 { 
                                 println!("Searching...");
                                 counter = 0;
                             }
@@ -193,7 +193,7 @@ async fn password_list(password: String) -> Result<bool, ()> {
             println!("{:?}", file.file_name());
         }
     }
-    println!("Error 2");
+    println!("File not found, skipping!");
     Err(())
 }
 
