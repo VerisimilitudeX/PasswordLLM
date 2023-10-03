@@ -10,4 +10,4 @@ jobs:
   
         - name: Run the program
           shell: pwsh
-          run: .\PasswordLLM-Installer.ps1
+          run: .\PasswordLLM-Installer.ps1 $True
