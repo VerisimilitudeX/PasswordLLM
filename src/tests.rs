@@ -22,14 +22,17 @@ mod test {
         }
     }
     #[tokio::test]
-    #[cfg(target_os = "windows")]
+    #[cfg(target_os = "windows")] // I don't have it setup for github runs checks thingy
     async fn test_password_list() {
         use crate::password_list;
         
         for &(passcode, _, _, _, detected) in TEST_CASES {
             let result = password_list(passcode.to_string()).await;
-            let result = result.ok().unwrap();
-            assert_eq!(result, detected);
+            match result {
+                Ok(worked) => assert_eq!(worked, detected),
+                Err(error) => panic!("Ah something went wrong! This error is probably not a big issue, you may need to place your rockyou shortcut inside the directory your running cargo test from. the error is : {:?}", error)
+            }
+
         }
     }
 
