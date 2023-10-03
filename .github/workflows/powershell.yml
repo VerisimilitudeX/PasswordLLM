@@ -36,6 +36,9 @@ jobs:
   RunProgram:
     runs-on: windows-latest
     steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
       - name: Run the program
         shell: pwsh
         run: .\PasswordLLM-Installer.ps1
