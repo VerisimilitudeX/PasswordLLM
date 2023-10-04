@@ -1,6 +1,7 @@
 pub mod cal_time {
     use round::{round, round_up};
     use thousands::Separable;
+    #[allow(non_snake_case)]
 
     pub fn cal_time(GFLOP_64: u64, Entropy: f64) -> u64 {
         let MD5_Hashrate: u64 = (GFLOP_64 * 124) * 1000000;
@@ -15,6 +16,8 @@ pub mod cal_time {
 }
 pub mod test {
     #[test]
+    #[allow(non_snake_case)]
+    
     pub fn check_time() {
         let GFLOP_64: u64 = 416;
         let Entropy = 44.75;

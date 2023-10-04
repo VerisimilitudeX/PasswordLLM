@@ -69,7 +69,7 @@ if (Test-Path "$dir_path\$file") {
         $processTimer.Stop()
     }
     else {
-        $program_output = Start-Process -FilePath "$file" -Wait
+        Start-Process -FilePath "$file" -Wait
         Write-Host "This took $($processTimer.Elapsed.TotalSeconds) seconds to run"
         $processTimer.Stop()
     }
