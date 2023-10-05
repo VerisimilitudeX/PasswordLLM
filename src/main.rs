@@ -34,9 +34,11 @@ pub async fn main() {
     let pool_size = get_pool_size(password.clone());
     let entropy = calculate_entropy(pool_size); // calls functions
     let alphabet_match = regex_match(password.clone());
-    let statistics = obtainGPU(); // todo
-    cal_time(statistics.unwrap().into(), entropy);
+    let mut statistics = obtainGPU(); // todo
 
+    if statistics.as_mut().unwrap().is_some() {
+        cal_time(statistics.unwrap().unwrap(), entropy);
+    }
     check_if_pwned(password.clone()).await;
 
     if !alphabet_match { // just a big match statement to check to see if it should call a function
