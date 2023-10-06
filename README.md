@@ -16,10 +16,11 @@ To install PasswordLLM, follow these steps:
 
 1. Download the latest release from the [PasswordLLM releases page](https://github.com/VerisimilitudeX/PasswordLLM/releases).
 2. Extract the downloaded archive.
+3. Run the run.bat file in order to launch the Powershell script with the correct permissions, the Powershell script will install the binary file.
 
 ## Usage
 
-To use PasswordLLM, run the Powershell installer script by right clicking it and pressing "Run with Powershell" Or for an offline-mode, run the "PasswordGPT-64x.exe" file.
+To use PasswordLLM, run the Powershell installer script by right clicking it and pressing "Run with Powershell" Or for an offline-mode, just run the "PasswordGPT-64x.exe" file.
 
 PasswordGPT will then evaluate the password and display the estimated time it would take an attacker to guess it. It will also provide suggestions for improving the strength of your password.
 

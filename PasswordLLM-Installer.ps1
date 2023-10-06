@@ -6,8 +6,11 @@ $dir_path = "$downloads_folder/PasswordLLM"
 $TempFile = New-TemporaryFile
 # Accepts parameters for Github Workflow
 $GHW = $args[0]
+# Get's the current directory location of where the powershell script is located
+$ScriptLocation = Split-Path -Path (Get-Location) -Leaf
 
-$repo = "VerisimilitudeX/PasswordLLM"
+$program_name = "PasswordLLM"
+$repo = "VerisimilitudeX/$program_name"
 $file = "PasswordLLM-64x.exe"
 $releases = "https://api.github.com/repos/$repo/releases"
 $RockYou = "https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt"
@@ -15,6 +18,9 @@ $RockYou = "https://github.com/brannondorsey/naive-hashcat/releases/download/dat
 #$ErrorActionPreference = 'SilentlyContinue' 
 $ProgressPreference = 'SilentlyContinue'  # adds increased downloading speed
 
+# if ($ScriptLocation -ne "$program_name") {
+ 
+# } todo
 try {
     # Check if the directory already exists
     if ([System.IO.Directory]::Exists($dir_path)) {
@@ -28,6 +34,8 @@ try {
     Write-Host "Something went wrong..." -ForegroundColor Red
     Write-Error $_.Exception.Message
 }
+
+
 Write-Host "Checking latest release of program..."
 $tag = (Invoke-WebRequest $releases | ConvertFrom-Json)[0].tag_name
 $download = "https://github.com/$repo/releases/download/$tag/$file"
@@ -69,7 +77,7 @@ if (Test-Path "$dir_path\$file") {
         $processTimer.Stop()
     }
     else {
-        $program_output = Start-Process -FilePath "$file" -Wait
+        Start-Process -FilePath "$file" -Wait
         Write-Host "This took $($processTimer.Elapsed.TotalSeconds) seconds to run"
         $processTimer.Stop()
     }
