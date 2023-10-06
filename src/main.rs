@@ -24,17 +24,26 @@ use regex::Regex;
 #[tokio::main]
 pub async fn main() {
     let args: Vec<String> = env::args().collect(); // stores arguments in vector
+    let password;
+    let mut workflow = false;
+    
+    if args.len() > 1 {
+        password = args[1].clone();
+        if args.len() == 2 {
+            workflow = true;
+        }
+        else {
+            workflow = false;
+        }
 
-    let password: String = if args.len() > 1 {
-        args[1].clone()
     } else {
-        rpassword::prompt_password("Password: ").unwrap() // prompts for passwords if no arguments are given
-    };
+        password = rpassword::prompt_password("Password: ").unwrap(); // prompts for passwords if no arguments are given
+    }
 
     let pool_size = get_pool_size(password.clone());
     let entropy = calculate_entropy(pool_size); // calls functions
     let alphabet_match = regex_match(password.clone());
-    let mut statistics = obtainGPU(); // todo
+    let mut statistics = obtainGPU(workflow); // todo
 
     if statistics.as_mut().unwrap().is_some() {
         cal_time(statistics.unwrap().unwrap(), entropy);

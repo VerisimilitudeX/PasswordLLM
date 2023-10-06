@@ -7,28 +7,33 @@ pub mod gpu {
     use std::error::Error;
 
     pub mod GPU_Tools {
-    pub struct GPU_Status { // hold and organize information of gpu
-       pub  name: String,
-        pub clock: u32,
-        pub cuda_core: u32,
-        pub SMP: u32,
-        pub gflops_fp32: u32,
-        pub gflops_fp64: u32,
-    }
+        pub struct GPU_Status { // hold and organize information of gpu
+            pub name: String,
+            pub clock: u32,
+            pub cuda_core: u32,
+            pub SMP: u32,
+            pub gflops_fp32: u32,
+            pub gflops_fp64: u32,
+        }
 
-    impl GPU_Status {
-        pub fn GFLOP64(&self) -> u32 {
-            let gpu_gflops_FP64 = ((self.clock * self.cuda_core * 2) / 4) / 1000;
-            return gpu_gflops_FP64;
+        impl GPU_Status {
+            pub fn GFLOP64(&self) -> u32 {
+                let gpu_gflops_FP64 = ((self.clock * self.cuda_core * 2) / 4) / 1000;
+                return gpu_gflops_FP64;
+            }
+            pub fn GFLOP32(&self) -> u32 {
+                let gpu_gflops_FP32: u32 = (self.clock * self.cuda_core * 2) / 1000;
+                return gpu_gflops_FP32;
+            }
         }
-        pub fn GFLOP32(&self) -> u32 {
-            let gpu_gflops_FP32: u32 = (self.clock * self.cuda_core * 2) / 1000;
-            return gpu_gflops_FP32;
-        }
-    }
     }
     use GPU_Tools::GPU_Status;
-    pub fn obtainGPU() -> Result<Option<GPU_Status>, Box<dyn Error>> {
+    pub fn obtainGPU(workflow: bool) -> Result<Option<GPU_Status>, Box<dyn Error>> {
+        
+        if workflow {
+            return Ok(None);
+        }
+
         let devices = get_all_devices(CL_DEVICE_TYPE_GPU);
         let devices = match devices {
             Ok(x) => x,
