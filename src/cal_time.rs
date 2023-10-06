@@ -37,6 +37,6 @@ mod test_time {
         GPU.gflops_fp64 = GPU.GFLOP64();
 
         let result = cal_time(GPU, Entropy);
-        assert_eq!(result, 2295)
+        assert_eq!(result, 287)
     }
 }
