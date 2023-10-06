@@ -18,11 +18,10 @@ pub mod gpu {
 
         impl GPU_Status {
             pub fn GFLOP64(&self) -> u32 {
-                
-                ((self.clock * self.cuda_core * 2) / 4) / 1000
+                (self.clock * self.SMP / 2) / 1000
             }
             pub fn GFLOP32(&self) -> u32 {
-                let gpu_gflops_FP32: u32 = (self.clock * self.cuda_core * 2) / 1000;
+                let gpu_gflops_FP32: u32 = (self.clock * self.SMP * 2) / 1000;
                 gpu_gflops_FP32
             }
         }
@@ -78,7 +77,6 @@ pub mod gpu {
         let gpu_device = opencl3::device::Device::new(devices[gpu_choice as usize]);
         let gpu_clock = gpu_device.max_clock_frequency().unwrap();
         let gpu_cores = gpu_device.max_compute_units()?;
-        let gpu_cores = gpu_cores * 8;
 
         let mut GPU: GPU_Status = GPU_Status {
             name: gpu_device.name().unwrap(),

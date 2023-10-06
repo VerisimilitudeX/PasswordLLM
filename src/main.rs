@@ -168,6 +168,7 @@ async fn password_list(password: String) -> Result<bool, ()> {
 
                 let mut line = 0;
                 let mut counter = 0;
+                let mut errors = 0;
                 for passwords in reader.lines() {
                     counter+=1;
                     line+=1;
@@ -176,14 +177,18 @@ async fn password_list(password: String) -> Result<bool, ()> {
                             if passwords == password {
                                 return Ok(true);
                             }
-                            else if counter % 4000 == 0 { 
+                            else if counter == 351394 { 
                                 println!("Searching...");
                                 counter = 0;
                             }
                         }
                         Err(err) => {
-                            println!("Error reading line: {:?}, the error is \"{}\"", line, err);
-                            tokio::time::sleep(Duration::from_secs(1)).await;
+                            errors+=1;
+                            if errors == 15 {
+                                println!("Error reading line: {:?}, the error is \"{}\"", line, err);
+                                tokio::time::sleep(Duration::from_secs(1)).await;
+                                errors = 0;
+                            }
                         }
                     }
                     if line >= 2459760 { // if it's at the end of the file, stop the search and return password not found
