@@ -11,7 +11,7 @@ pub mod cal_time {
         println!("Possible Combinations {}", combinations.separate_with_commas());
         let time_sec = round_up((combinations / MD5_Hashrate as f64) / 2.0, 0);
         println!("Time: {} seconds", time_sec.separate_with_commas());
-        return time_sec as u64
+        time_sec as u64
         // 29,586,412,362,451 / 51584000000 = 573 seconds to crack
     }
 }

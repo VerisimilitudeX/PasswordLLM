@@ -18,12 +18,12 @@ pub mod gpu {
 
         impl GPU_Status {
             pub fn GFLOP64(&self) -> u32 {
-                let gpu_gflops_FP64 = ((self.clock * self.cuda_core * 2) / 4) / 1000;
-                return gpu_gflops_FP64;
+                
+                ((self.clock * self.cuda_core * 2) / 4) / 1000
             }
             pub fn GFLOP32(&self) -> u32 {
                 let gpu_gflops_FP32: u32 = (self.clock * self.cuda_core * 2) / 1000;
-                return gpu_gflops_FP32;
+                gpu_gflops_FP32
             }
         }
     }

@@ -29,12 +29,7 @@ pub async fn main() {
     
     if args.len() > 1 {
         password = args[1].clone();
-        if args.len() == 2 {
-            workflow = true;
-        }
-        else {
-            workflow = false;
-        }
+        workflow = args.len() == 2;
 
     } else {
         password = rpassword::prompt_password("Password: ").unwrap(); // prompts for passwords if no arguments are given
