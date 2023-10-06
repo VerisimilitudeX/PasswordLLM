@@ -15,27 +15,28 @@ pub mod cal_time {
         // 29,586,412,362,451 / 51584000000 = 573 seconds to crack
     }
 }
-pub mod test {
-    #[cfg(test)]
+mod test_time {
+    #[test]
     #[allow(non_snake_case)]
     pub fn check_time() {
-        use crate::gpu::gpu::GPU_Tools::GPU_Status;
-        let GFLOP_64: u64 = 416;
+        use crate::gpu::gpu::GPU_Tools::*;
+        use crate::cal_time;
+
         let Entropy = 44.75;
 
-        // let GPU: GPU_Status = GPU_Status {
-        //     name: "Intel",
-        //     clock: 0,
-        //     cuda_core: 0,
-        //     SMP: 0,                 fix later todo
-        //     gflops_fp32: 0,
-        //     gflops_fp64: 0,
-        // };
+        let mut GPU: GPU_Status = GPU_Status {
+            name: "Intel".to_string(),
+            clock: 1300,
+            cuda_core: 80,
+            SMP: 640,
+            gflops_fp32: 0,
+            gflops_fp64: 0,
+        };
 
+        GPU.gflops_fp32 = GPU.GFLOP32();
+        GPU.gflops_fp64 = GPU.GFLOP64();
 
-        use crate::cal_time;
-        // let result = cal_time(GFLOP_64, Entropy); fix later
-
-        //assert_eq!(result, 287) todo later
+        let result = cal_time(GPU, Entropy);
+        assert_eq!(result, 2295)
     }
 }
