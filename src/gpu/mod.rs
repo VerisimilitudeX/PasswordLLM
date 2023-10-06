@@ -1,9 +1,10 @@
 #[allow(non_snake_case)]
+#[allow(non_camel_case_types)]
 
 pub mod gpu { 
     use opencl3::device::{get_all_devices, CL_DEVICE_TYPE_GPU};
     use std::io;
-    use std::{error::Error};
+    use std::error::Error;
 
     pub mod GPU_Tools {
     pub struct GPU_Status { // hold and organize information of gpu
