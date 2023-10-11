@@ -1,30 +1,38 @@
-# PasswordLLM (formerly RealPass)
-Is your password **_strong_** or just **_wrong_**? A free and open source program to test your password against realistic and real-world scenarios.
+# create-svelte
 
-PasswordLLM is a free and open source password testing tool that uses realistic and real-world scenarios to evaluate the strength of your passwords.
+Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
 
-## Features
+## Creating a project
 
-- Uses advanced algorithms and attack simulations to estimate how long it would take an attacker to guess your password.
-- Includes a dictionary of common passwords to check against.
-- Works offline with limited functionality
-- Checks lists of breached passwords
+If you're seeing this, you've probably already done this step. Congrats!
 
-## Installation
+```bash
+# create a new project in the current directory
+npm create svelte@latest
 
-To install PasswordLLM, follow these steps:
+# create a new project in my-app
+npm create svelte@latest my-app
+```
 
-1. Download the latest release from the [PasswordLLM releases page](https://github.com/VerisimilitudeX/PasswordLLM/releases).
-2. Extract the downloaded archive.
-3. Run the run.bat file in order to launch the Powershell script with the correct permissions, the Powershell script will install the binary file.
+## Developing
 
-## Usage
+Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
-To use PasswordLLM, run the Powershell installer script by right clicking it and pressing "Run with Powershell" Or for an offline-mode, just run the "PasswordGPT-64x.exe" file.
+```bash
+npm run dev
 
-PasswordGPT will then evaluate the password and display the estimated time it would take an attacker to guess it. It will also provide suggestions for improving the strength of your password.
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
+```
 
-## License
-MIT
+## Building
 
-###### Note: This software is a joint collaboration between @LimesKey & @VerisimilitudeX.
+To create a production version of your app:
+
+```bash
+npm run build
+```
+
+You can preview the production build with `npm run preview`.
+
+> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.

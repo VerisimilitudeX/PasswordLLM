@@ -7,7 +7,7 @@ $TempFile = New-TemporaryFile
 # Accepts parameters for Github Workflow
 $GHW = $args[0]
 # Get's the current directory location of where the powershell script is located
-$ScriptLocation = Split-Path -Path (Get-Location) -Leaf
+#$ScriptLocation = Split-Path -Path (Get-Location) -Leaf
 
 $program_name = "PasswordLLM"
 $repo = "VerisimilitudeX/$program_name"
