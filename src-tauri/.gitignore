@@ -17,3 +17,9 @@ Cargo.lock
 settings.json
 
 Rockyou.*
+
+#sveltekit stuff
+node_modules/
+package-lock.json
+pnpm-lock.yaml
+
