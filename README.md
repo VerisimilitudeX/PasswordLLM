@@ -9,6 +9,8 @@ PasswordLLM is a free and open-source password testing tool that uses realistic 
 - Includes a dictionary of common passwords to check against.
 - Works offline with limited functionality
 - Checks lists of breached passwords
+- Calculates bits of entropy
+- Retrieves GPU statistics like GPU core count
 
 - (**Todo New**) Mini GUI build with [Tauri](https://tauri.app/)!
 
