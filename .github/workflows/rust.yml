@@ -1,11 +1,9 @@
 name: Rust
 
 on:
-  push:
-    branches: [ "main", "master", "GPU-MD5-Crack" ]
-  pull_request:
-    branches: [ "main", "master", "GPU-MD5-Crack" ]
-
+  - push
+  - pull_request
+  
 env:
   CARGO_TERM_COLOR: always
 
