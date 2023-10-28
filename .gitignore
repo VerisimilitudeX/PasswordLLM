@@ -25,4 +25,4 @@ dist-ssr
 
 target
 /password-llm/Cargo.lock
-src-tauri\resources\rockyou.txt
+rockyou.txt

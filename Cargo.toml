@@ -11,3 +11,5 @@ lto = "thin"
 opt-level = "s"
 codegen-units = 1
 strip = true
+
+resolver = "2"
