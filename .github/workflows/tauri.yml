@@ -18,10 +18,8 @@ jobs:
         version: 8.9.2
 
     - name: Install dependencies
-      run: pnpm install
-
-    - name: apt install
       run: |
+        pnpm install
         sudo apt update
 
         sudo apt install libwebkit2gtk-4.0-dev \
