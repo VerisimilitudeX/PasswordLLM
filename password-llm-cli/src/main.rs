@@ -111,7 +111,7 @@ async fn download_rockyou() -> Result<(), Box<dyn std::error::Error>> {
 		write!(lock, "Downloading rockyou.txt: {}/{} bytes\r", written, file_size)?;
 	}
 	writer.flush()?;
-	print!("\n");
+	println!();
 
 	std::fs::File::create(ROCKYOU_PATH.join("rockyou_check"))?;
 	Ok(())

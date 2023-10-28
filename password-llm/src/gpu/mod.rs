@@ -26,7 +26,7 @@ impl GpuStats {
 pub fn list_gpus() -> Result<Vec<Device>, ClError> {
 	Ok(get_all_devices(CL_DEVICE_TYPE_GPU)?
 		.into_iter()
-		.map(|e| Device::new(e))
+		.map(Device::new)
 		.collect())
 }
 
@@ -40,7 +40,7 @@ pub fn obtain_stats_from_device(device: &opencl3::device::Device, workflow: bool
 
     let mut gpu: GpuStats = GpuStats {
         name: device.name().unwrap(),
-        clock: clock,
+        clock,
         cuda_cores: cores,
         smp: cores * 8,
         gflops_fp32: 0,
@@ -61,5 +61,5 @@ pub fn obtain_stats_from_index(device_index: usize, workflow: bool) -> Result<Op
     let devices = list_gpus()?;
     let device = devices[device_index];
 
-    Ok(obtain_stats_from_device(&device, workflow)?)
+    obtain_stats_from_device(&device, workflow)
 }

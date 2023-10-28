@@ -11,7 +11,7 @@ async fn evaluate_password_strength(password: String, gpu_index: usize, handle: 
 
 	let file = std::fs::File::open(&resource_path).unwrap();
 
-	Ok(password_llm::evaluate_password_strength(password, file, Some(gpu_index)).await?)
+	password_llm::evaluate_password_strength(password, file, Some(gpu_index)).await
 }
 
 #[tauri::command]

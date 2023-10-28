@@ -186,7 +186,7 @@ async fn check_dictionary(password: String, dictionary: File) -> bool {
 
 	println!("Failed to read {} lines in rockyou.txt", errors);
 
-	return false;
+	false
 }
 
 fn regex_match(password: String) -> bool {
