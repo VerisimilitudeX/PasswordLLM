@@ -20,5 +20,8 @@ jobs:
     - name: Install dependencies
       run: pnpm install
 
+    - name: test stuff
+      run: apt-get install libgdk3-dev
+
     - name: Run Application
       run: pnpm tauri dev
