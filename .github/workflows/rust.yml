@@ -10,8 +10,11 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+
     - name: Install pnpm
       uses: pnpm/action-setup@v2
       with:
@@ -43,9 +46,6 @@ jobs:
           intel-level-zero-gpu level-zero \
           intel-media-va-driver-non-free libmfx1
         sudo apt-get install ocl-icd-opencl-dev
-
-    - name: Checkout code
-      uses: actions/checkout@v3
 
     - name: Build
       run: cargo build --verbose
@@ -54,6 +54,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+
     - name: Install pnpm
       uses: pnpm/action-setup@v2
       with:
@@ -85,9 +89,6 @@ jobs:
           intel-level-zero-gpu level-zero \
           intel-media-va-driver-non-free libmfx1
         sudo apt-get install ocl-icd-opencl-dev
-
-    - name: Checkout code
-      uses: actions/checkout@v3
 
     - name: Run tests
       run: cargo test --verbose
