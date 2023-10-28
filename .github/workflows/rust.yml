@@ -1,8 +1,8 @@
 name: Rust
 
 on:
-  - push
-  - pull_request
+  push:
+  pull_request:
   
 env:
   CARGO_TERM_COLOR: always
@@ -10,8 +10,27 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
+    - name: Install pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8.9.2
+
+    - name: Install dependencies
+      run: |
+        pnpm install
+        sudo apt update
+        sudo apt install libwebkit2gtk-4.0-dev \
+        build-essential \
+        curl \
+        wget \
+        file \
+        libssl-dev \
+        libgtk-3-dev \
+        libayatana-appindicator3-dev \
+        librsvg2-dev
+
     - name: Load OpenCL
       run: |
         wget -qO - https://repositories.intel.com/graphics/intel-graphics.key |
@@ -24,8 +43,10 @@ jobs:
           intel-level-zero-gpu level-zero \
           intel-media-va-driver-non-free libmfx1
         sudo apt-get install ocl-icd-opencl-dev
-    - uses: actions/checkout@v3
-            
+
+    - name: Checkout code
+      uses: actions/checkout@v3
+
     - name: Build
       run: cargo build --verbose
 
@@ -33,6 +54,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Install pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8.9.2
+
+    - name: Install dependencies
+      run: |
+        pnpm install
+        sudo apt update
+        sudo apt install libwebkit2gtk-4.0-dev \
+        build-essential \
+        curl \
+        wget \
+        file \
+        libssl-dev \
+        libgtk-3-dev \
+        libayatana-appindicator3-dev \
+        librsvg2-dev
+
     - name: Load OpenCL
       run: |
         wget -qO - https://repositories.intel.com/graphics/intel-graphics.key |
@@ -45,6 +85,9 @@ jobs:
           intel-level-zero-gpu level-zero \
           intel-media-va-driver-non-free libmfx1
         sudo apt-get install ocl-icd-opencl-dev
-    - uses: actions/checkout@v3
+
+    - name: Checkout code
+      uses: actions/checkout@v3
+
     - name: Run tests
       run: cargo test --verbose
