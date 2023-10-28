@@ -32,5 +32,18 @@ jobs:
         libayatana-appindicator3-dev \
         librsvg2-dev 
 
+    - name: Load OpenCL
+      run: |
+        wget -qO - https://repositories.intel.com/graphics/intel-graphics.key |
+          sudo apt-key add -
+        sudo add-apt-repository \
+          'deb [arch=amd64] https://repositories.intel.com/graphics/ubuntu focal main'
+        sudo apt-get update
+        sudo apt-get install \
+          intel-opencl-icd \
+          intel-level-zero-gpu level-zero \
+          intel-media-va-driver-non-free libmfx1
+        sudo apt-get install ocl-icd-opencl-dev
+
     - name: Run Application
       run: pnpm tauri dev

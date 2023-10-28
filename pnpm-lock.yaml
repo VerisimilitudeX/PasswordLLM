@@ -9,7 +9,7 @@ dependencies:
     specifier: ^3.0.0
     version: 3.0.0
   '@tauri-apps/api':
-    specifier: ^1.5.0
+    specifier: ^1.5.1
     version: 1.5.1
   svelte-icons:
     specifier: ^2.1.0
@@ -17,31 +17,31 @@ dependencies:
 
 devDependencies:
   '@sveltejs/vite-plugin-svelte':
-    specifier: ^2.4.2
+    specifier: ^2.4.6
     version: 2.4.6(svelte@4.2.2)(vite@4.5.0)
   '@tauri-apps/cli':
-    specifier: ^1.5.0
+    specifier: ^1.5.6
     version: 1.5.6
   '@tsconfig/svelte':
-    specifier: ^5.0.0
+    specifier: ^5.0.2
     version: 5.0.2
   svelte:
-    specifier: ^4.0.5
+    specifier: ^4.2.2
     version: 4.2.2
   svelte-check:
-    specifier: ^3.4.6
+    specifier: ^3.5.2
     version: 3.5.2(svelte@4.2.2)
   svelte-preprocess:
-    specifier: ^5.0.0
+    specifier: ^5.0.4
     version: 5.0.4(svelte@4.2.2)(typescript@5.2.2)
   tslib:
-    specifier: ^2.6.0
+    specifier: ^2.6.2
     version: 2.6.2
   typescript:
-    specifier: ^5.0.2
+    specifier: ^5.2.2
     version: 5.2.2
   vite:
-    specifier: ^4.4.4
+    specifier: ^4.5.0
     version: 4.5.0
 
 packages:
@@ -467,8 +467,8 @@ packages:
     resolution: {integrity: sha512-QzhsZ1dMGyJbn/D9V80zp4GIA4J4rfAjCCxc3MP+new0E8dyVdSkR735Lx+n3LIaHNFcjHL5+TbziccuT+fdoQ==}
     dev: true
 
-  /acorn@8.10.0:
-    resolution: {integrity: sha512-F0SAmZ8iUtS//m8DmCTA0jlh6TDKkHQyK6xc6V4KDTyZKA9dnvX9/3sRTVQrWm79glUAZbnmmNcdYwUIHWVybw==}
+  /acorn@8.11.2:
+    resolution: {integrity: sha512-nc0Axzp/0FILLEVsm4fNwLCwMttvhEI263QtVPQcbpfZZ3ts0hLsZGOpE6czNlid7CJ9MlyH8reXkpsf3YUY4w==}
     engines: {node: '>=0.4.0'}
     hasBin: true
     dev: true
@@ -545,7 +545,7 @@ packages:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.15
       '@types/estree': 1.0.3
-      acorn: 8.10.0
+      acorn: 8.11.2
       estree-walker: 3.0.3
       periscopic: 3.1.0
     dev: true
@@ -1036,7 +1036,7 @@ packages:
       '@ampproject/remapping': 2.2.1
       '@jridgewell/sourcemap-codec': 1.4.15
       '@jridgewell/trace-mapping': 0.3.20
-      acorn: 8.10.0
+      acorn: 8.11.2
       aria-query: 5.3.0
       axobject-query: 3.2.1
       code-red: 1.0.4
