@@ -5,6 +5,7 @@ use password_llm::PasswordStrength;
 use thousands::Separable;
 use futures_util::stream::StreamExt;
 use lazy_static::lazy_static;
+use std::io;
 
 #[cfg(target_os = "windows")]
 lazy_static! {
@@ -20,7 +21,7 @@ lazy_static! {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	download_rockyou().await?;
 
-	let password = dialoguer::Password::default().with_prompt("Enter your password: ").interact().unwrap();
+	let password = dialoguer::Password::default().with_prompt("Enter your password").interact().unwrap();
 
 	let gpus = password_llm::gpu::list_gpus();
 	let mut gpu_index = None;
@@ -80,6 +81,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 			evaluation_result.possible_combinations.unwrap().separate_with_commas(), weeks.separate_with_commas(), days, hours, minutes, seconds
 		);
 	}
+    println!("\nPress ENTER to exit...");
+    io::stdin().read_line(&mut String::new()).unwrap();
 
 	Ok(())
 }
@@ -111,6 +114,5 @@ async fn download_rockyou() -> Result<(), Box<dyn std::error::Error>> {
 	print!("\n");
 
 	std::fs::File::create(ROCKYOU_PATH.join("rockyou_check"))?;
-
 	Ok(())
 }

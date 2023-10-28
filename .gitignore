@@ -14,7 +14,11 @@ dist-ssr
 
 # Editor directories and files
 .vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
 !.vscode/extensions.json
+!.vscode/*.code-snippets
 .idea
 .DS_Store
 *.suo
@@ -22,6 +26,19 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.history/
+*.vsix
+.history
+.ionide
 
-target
-/password-llm/Cargo.lock
+# Rust Stuff
+target/
+debug/
+**/*.rs.bk
+*.pdb
+rust-project.json
+
+# Svelte stuff
+
+.svelte-kit/
+package
