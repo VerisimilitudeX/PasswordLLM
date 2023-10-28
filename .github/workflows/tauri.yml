@@ -1,0 +1,28 @@
+name: Tauri
+
+on:
+  push:
+  pull_request:
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8.9.2
+        run_install: |
+          - recursive: true
+            args: [--frozen-lockfile, --strict-peer-dependencies]
+          - args: [--global, gulp, prettier, typescript]
+
+    - name: Install dependencies
+      run: pnpm install
+
+    - name: Run Application
+      run: pnpm tauri dev

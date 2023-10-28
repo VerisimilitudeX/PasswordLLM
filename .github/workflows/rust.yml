@@ -25,21 +25,6 @@ jobs:
           intel-media-va-driver-non-free libmfx1
         sudo apt-get install ocl-icd-opencl-dev
     - uses: actions/checkout@v3
-
-    - name: Install pnpm
-      uses: pnpm/action-setup@v2
-      with:
-        version: 8.9.2
-        run_install: |
-          - recursive: true
-            args: [--frozen-lockfile, --strict-peer-dependencies]
-          - args: [--global, gulp, prettier, typescript]
-          
-    - name: Install dependencies
-      run: pnpm install
-
-    - name: Run Application
-      run: pnpm tauri dev
             
     - name: Build
       run: cargo build --verbose
