@@ -1,0 +1,13 @@
+[workspace]
+members = [
+    "src-tauri",
+    "password-llm-cli",
+    "password-llm"
+]
+
+[profile.release]
+panic = "abort"
+lto = "thin"
+opt-level = "s"
+codegen-units = 1
+strip = true

@@ -24,11 +24,6 @@ To use PasswordLLM, run the Powershell installer script by right clicking it and
 
 PasswordGPT will then evaluate the password and display the estimated time it would take an attacker to guess it. It will also provide suggestions for improving the strength of your password.
 
-## Build from source
-
-### Dependencies
-1. [Nvidia Cuda Toolkit](https://developer.nvidia.com/cuda-downloads)
-2. Create a system enviornment variable to `C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.3\lib\x64` after completing step 1
 ## License
 MIT
 
