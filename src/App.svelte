@@ -42,22 +42,22 @@
 
 	function seconds_to_wdhms_str(total_seconds: number) {
 
-		//create a function that displays the total seconds in a human readable format
-		
+	const seconds = Math.floor(total_seconds % 60);
+	const minutes = Math.floor((total_seconds / 60) % 60);
+	const hours = Math.floor((total_seconds / (60 * 60)) % 24);
+	const days = Math.floor((total_seconds / (60 * 60 * 24)) % 7);
+	const weeks = Math.floor((total_seconds / (60 * 60 * 24 * 7)) % 52.1429);
+	const months = Math.floor((total_seconds / (60 * 60 * 24 * 30)) % 12);
+	const years = Math.floor(total_seconds / (60 * 60 * 24 * 365));
 
-		let seconds = Math.floor(total_seconds % 60);
-		let minutes = Math.floor((total_seconds / 60) % 60);
-		let hours = Math.floor((total_seconds / (60 * 60)) % 24);
-		let days = Math.floor((total_seconds / (60 * 60 * 24)) % 7);
-		let weeks = Math.floor((total_seconds / (60 * 60 * 24 * 7)) % 52.1429);
-		const months = Math.floor((total_seconds / (60 * 60 * 24 * 30)) % 12);
-		const years = Math.floor(total_seconds / (60 * 60 * 24 * 365));
-		
-		//const block = `${weeks > 0 ?? weeks + "Weeks, "}`
-		
-		return `${years > 0 ? years.toLocaleString() + " Years, " : ""}${months > 0 ? months.toLocaleString() + " Months, " : ""}${weeks > 0 ? weeks.toLocaleString() + " Weeks, " : ""}${days > 0 ? days.toLocaleString() + " Days, " : ""}${hours > 0 ? hours.toLocaleString() + " Hours, " : ""}${minutes > 0 ? minutes.toLocaleString() + " Minutes, " : ""}${seconds > 0 && years < 0 ? seconds + " Seconds" : ""}`;
-		//return `${weeks.toLocaleString()} weeks, ${days} days, ${hours} hours, ${minutes} minutes and ${seconds} seconds`;
+	return `${years > 0 ? years.toLocaleString() + " Years, " : ""}
+	${months > 0 ? months.toLocaleString() + " Months, " : ""}
+	${days > 0 && !(years >= 1)? days.toLocaleString() + " Days, " : ""}
+	${hours > 0 && !(years >= 1)? hours.toLocaleString() + " Hours, " : ""}
+	${minutes > 0 && !(years >= 1)? minutes.toLocaleString() + " Minutes " : ""}
+	${seconds > 0 && !(years >= 1) ? seconds + " Second(s)" : ""}`;
 	}
+
 </script>
 
 <main class="container">
@@ -85,11 +85,12 @@
 		{/if}
 	</h2>
 	<div class="extra-info" style={password_evaluating ? "opacity: 0" : "opacity: 1"}>
+
 		{#if password_evaluation}
 			<span>Entropy:</span>
 			<span>{password_evaluation.entropy} bits</span>
 			<span>Pwned info:</span>
-			<span>{password_evaluation.times_pwned > 0 ? "Your password has been detected" + password_evaluation.times_pwned + "times in database leaks!" : "Your password is not present in any database leaks."}</span>
+			<span>{password_evaluation.times_pwned > 0 ? "Your password has been detected " + password_evaluation.times_pwned + " times in database leaks!" : "Your password is not present in any database leaks."}</span>
 			{#if password_evaluation.possible_combinations && password_evaluation.approximate_time_to_crack_secs}
 				<span>Possible combinations:</span>
 				<span>{password_evaluation.possible_combinations.toLocaleString()}</span>

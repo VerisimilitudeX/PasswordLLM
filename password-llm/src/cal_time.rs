@@ -3,9 +3,10 @@ use crate::gpu::GpuStats;
 
 // Returns possible combinations and approximate time to crack in seconds
 pub fn cal_time(GPU: GpuStats, Entropy: f64) -> (u64, u64) {
-    let MD5_Hashrate: u64 = (GPU.gflop64() as u64 * 124) * 1000000;
+    let MD5_Hashrate: u64 = (GPU.gflop64()) as u64 * 124;
     let combinations = f64::powf(2.0, Entropy).round();
-
+    println!("Gflop64: {}", GPU.gflop64());
+    println!("MD5 Hashrate: {} MH", MD5_Hashrate);
     let time_sec = f64::ceil((combinations / MD5_Hashrate as f64) / 2.0);
 
     (combinations as u64, time_sec as u64)   
