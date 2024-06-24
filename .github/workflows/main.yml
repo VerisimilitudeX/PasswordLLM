@@ -43,6 +43,12 @@ jobs:
         uses: actions/setup-node@v4.0.2
         with:
           node-version: 18.12
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4.0.0
+        with:
+            version: 9.1.4
+            run_install: true
                 
       - name: Tauri Build
         run: pnpm tauri build
