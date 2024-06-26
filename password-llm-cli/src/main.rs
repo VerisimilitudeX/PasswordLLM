@@ -15,7 +15,6 @@ lazy_static! {
 lazy_static! {
 	static ref ROCKYOU_PATH: PathBuf = PathBuf::from("/var/cache/PasswordLLM");
 }
-// TODO: macos
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -67,7 +66,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		PasswordStrength::ProneToDictionaryAttack => println!("\tYour password is vulnerable to dictionary-based bruteforce attacks!"),
 		other => println!("\tPassword strength: {:?}", other),
 	}
-
 
 	if gpu_index.is_some() {
 		let total_seconds = evaluation_result.approximate_time_to_crack_secs.unwrap();
