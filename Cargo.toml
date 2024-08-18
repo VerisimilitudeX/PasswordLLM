@@ -1,5 +1,6 @@
 [workspace]
-workspace.resolver = "2"
+resolver = "2"
+
 members = [
     "src-tauri",
     "password-llm-cli",
