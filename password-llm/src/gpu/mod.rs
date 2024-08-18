@@ -1,7 +1,6 @@
-use opencl3::device::{get_all_devices, CL_DEVICE_TYPE_GPU, Device};
+use opencl3::device::{get_all_devices, Device, CL_DEVICE_TYPE_GPU};
 use opencl3::error_codes::ClError;
 use serde::Serialize;
-
 
 #[derive(Serialize, Debug)]
 pub struct GpuStats {
@@ -24,14 +23,17 @@ impl GpuStats {
 }
 
 pub fn list_gpus() -> Result<Vec<Device>, ClError> {
-	Ok(get_all_devices(CL_DEVICE_TYPE_GPU)?
-		.into_iter()
-		.map(Device::new)
-		.collect())
+    Ok(get_all_devices(CL_DEVICE_TYPE_GPU)?
+        .into_iter()
+        .map(Device::new)
+        .collect())
 }
 
-pub fn obtain_stats_from_device(device: &opencl3::device::Device, workflow: bool) -> Result<Option<GpuStats>, ClError> {
-	if workflow {
+pub fn obtain_stats_from_device(
+    device: &opencl3::device::Device,
+    workflow: bool,
+) -> Result<Option<GpuStats>, ClError> {
+    if workflow {
         return Ok(None);
     }
 
@@ -50,10 +52,13 @@ pub fn obtain_stats_from_device(device: &opencl3::device::Device, workflow: bool
     gpu.gflops_fp32 = gpu.gflop32();
     gpu.gflops_fp64 = gpu.gflop64();
 
-	Ok(Some(gpu))
+    Ok(Some(gpu))
 }
 
-pub fn obtain_stats_from_index(device_index: usize, workflow: bool) -> Result<Option<GpuStats>, ClError> {
+pub fn obtain_stats_from_index(
+    device_index: usize,
+    workflow: bool,
+) -> Result<Option<GpuStats>, ClError> {
     if workflow {
         return Ok(None);
     }

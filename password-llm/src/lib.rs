@@ -1,55 +1,54 @@
+mod cal_time;
+pub mod gpu;
 #[allow(unused_must_use)]
 #[allow(non_snake_case)]
-
 mod tests;
 mod utils;
-pub mod gpu;
-mod cal_time;
 
+use cal_time::cal_time;
+use gpu::obtain_stats_from_index;
 use serde::Serialize;
 use utils::pwned_api;
-use gpu::obtain_stats_from_index;
-use cal_time::cal_time;
 
+use regex::Regex;
+use round::round;
 use std::env;
 use std::fs::File;
-use round::round;
 use std::io::{BufRead, BufReader};
 use tokio::{time::timeout, time::Duration};
-use regex::Regex;
 
 #[derive(Serialize, Debug)]
 pub enum PasswordStrength {
-	ProneToDictionaryAttack,
-	ProneToBruteforceAttack,
-	Weak,
-	Medium,
-	Strong,
-	VeryStrong,
+    ProneToDictionaryAttack,
+    ProneToBruteforceAttack,
+    Weak,
+    Medium,
+    Strong,
+    VeryStrong,
 }
 
 #[derive(Serialize)]
 pub struct PasswordEvaluationResult {
-	pub strength: PasswordStrength,
-	pub entropy: f64,
-	// None if no internet
-	pub times_pwned: Option<u64>,
-	// None if OpenCL errors are encountered
-	pub possible_combinations: Option<u64>,
-	// None if OpenCL errors are encountered
-	pub approximate_time_to_crack_secs: Option<u64>,
+    pub strength: PasswordStrength,
+    pub entropy: f64,
+    // None if no internet
+    pub times_pwned: Option<u64>,
+    // None if OpenCL errors are encountered
+    pub possible_combinations: Option<u64>,
+    // None if OpenCL errors are encountered
+    pub approximate_time_to_crack_secs: Option<u64>,
 }
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
-	#[error("RockYou.txt not found.")]
-	RockYouNotFound,
-	#[error("Timed out.")]
-	Timeout,
-	#[error(transparent)]
-	OpenCLError(#[from] opencl3::error_codes::ClError),
-	#[error(transparent)]
-	PwnedApiError(#[from] pwned::errors::Error),
+    #[error("RockYou.txt not found.")]
+    RockYouNotFound,
+    #[error("Timed out.")]
+    Timeout,
+    #[error(transparent)]
+    OpenCLError(#[from] opencl3::error_codes::ClError),
+    #[error(transparent)]
+    PwnedApiError(#[from] pwned::errors::Error),
 }
 
 impl serde::Serialize for Error {
@@ -61,10 +60,14 @@ impl serde::Serialize for Error {
     }
 }
 
-pub async fn evaluate_password_strength(password: String, dictionary: File, gpu_index: Option<usize>) -> Result<PasswordEvaluationResult, Error> {
+pub async fn evaluate_password_strength(
+    password: String,
+    dictionary: File,
+    gpu_index: Option<usize>,
+) -> Result<PasswordEvaluationResult, Error> {
     let args: Vec<String> = env::args().collect(); // stores arguments in vector
     let mut workflow = false;
-    
+
     if args.len() > 1 {
         workflow = args.len() == 2;
     }
@@ -72,57 +75,60 @@ pub async fn evaluate_password_strength(password: String, dictionary: File, gpu_
     let pool_size = get_pool_size(password.clone());
     let entropy = calculate_entropy(pool_size); // calls functions
     let alphabet_match = regex_match(password.clone());
-	// TODO
+    // TODO
     let statistics = if let Some(gpu_index) = gpu_index {
-		obtain_stats_from_index(gpu_index, workflow)?
-	} else {
-		None
-	};
+        obtain_stats_from_index(gpu_index, workflow)?
+    } else {
+        None
+    };
 
-	let mut time = None;
+    let mut time = None;
     if let Some(statistics) = statistics {
-		time = Some(cal_time(statistics, entropy));
+        time = Some(cal_time(statistics, entropy));
     }
 
     let pwned = tokio::spawn({
-		let password = password.clone();
-		async move { pwned_api::pass_check(&password).await }
-	});
+        let password = password.clone();
+        async move { pwned_api::pass_check(&password).await }
+    });
 
-	let mut pass_strength = match entropy as i64 {
+    let mut pass_strength = match entropy as i64 {
         strength if strength < 80 => PasswordStrength::Weak,
         strength if strength < 112 => PasswordStrength::Medium,
         strength if strength < 128 => PasswordStrength::Strong,
         _ => PasswordStrength::VeryStrong,
     };
 
-    if !alphabet_match { // just a big match statement to check to see if it should call a function
-        let rockyou = timeout(Duration::from_secs(60), check_dictionary(password.clone(), dictionary)).await;
+    if !alphabet_match {
+        // just a big match statement to check to see if it should call a function
+        let rockyou = timeout(
+            Duration::from_secs(60),
+            check_dictionary(password.clone(), dictionary),
+        )
+        .await;
         match rockyou {
             Ok(in_rockyou) => {
                 if in_rockyou {
-					pass_strength = PasswordStrength::ProneToDictionaryAttack;
-            	}
-            },
+                    pass_strength = PasswordStrength::ProneToDictionaryAttack;
+                }
+            }
             Err(_) => return Err(Error::Timeout),
         }
-    }
-    else {
+    } else {
         pass_strength = PasswordStrength::ProneToBruteforceAttack;
     }
 
-
-	let time = match time {
-		Some((a, b)) => (Some(a), Some(b)),
-		None => (None, None)
-	};
-	Ok(PasswordEvaluationResult {
-		strength: pass_strength,
-		entropy,
-		times_pwned: pwned.await.unwrap().ok(),
-		possible_combinations: time.0,
-		approximate_time_to_crack_secs: time.1,
-	})
+    let time = match time {
+        Some((a, b)) => (Some(a), Some(b)),
+        None => (None, None),
+    };
+    Ok(PasswordEvaluationResult {
+        strength: pass_strength,
+        entropy,
+        times_pwned: pwned.await.unwrap().ok(),
+        possible_combinations: time.0,
+        approximate_time_to_crack_secs: time.1,
+    })
 }
 
 // Pool size based on https://github.com/Kush-munot/Password-Strength-Checker
@@ -134,7 +140,7 @@ pub fn get_pool_size(password: String) -> Vec<u64> {
         if Regex::new(r#"[A-Z]"#).unwrap().is_match(password) {
             pool_score += 26
         }
-  
+
         if Regex::new(r#"[a-z]"#).unwrap().is_match(password) {
             pool_score += 26;
         }
@@ -179,14 +185,14 @@ async fn check_dictionary(password: String, dictionary: File) -> bool {
                 }
             }
             Err(_) => {
-                errors+=1;
+                errors += 1;
             }
         }
     }
 
-	println!("Failed to read {} lines in rockyou.txt", errors);
+    println!("Failed to read {} lines in rockyou.txt", errors);
 
-	false
+    false
 }
 
 fn regex_match(password: String) -> bool {

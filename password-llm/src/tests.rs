@@ -1,23 +1,30 @@
 #[cfg(test)]
 mod test {
-    use crate::{utils::pwned_api, cal_time};
-    
+    use crate::{cal_time, utils::pwned_api};
+
     // Test cases with different passcodes
     static TEST_CASES: &[(&str, u64, i64, u32, bool)] = &[
-        ("password", 26, 38, 9659365, true),     // Pool size: 26 (low_case) + 10 (digits), Entropy: 38, rockyoupasswordlist: True
-        ("Password123", 62, 66, 47708, true),  // Pool size: 26 (low_case) + 26 (up_case) + 10 (digits), Entropy: 65, rockyoupasswordlist: True
-        ("!@#123", 42, 32, 1259, true),       // Pool size: 26 (low_case) + 26 (up_case) + 10 (digits) + 6 (special), Entropy: 32, rockyoupasswordlist: True
+        ("password", 26, 38, 9659365, true), // Pool size: 26 (low_case) + 10 (digits), Entropy: 38, rockyoupasswordlist: True
+        ("Password123", 62, 66, 47708, true), // Pool size: 26 (low_case) + 26 (up_case) + 10 (digits), Entropy: 65, rockyoupasswordlist: True
+        ("!@#123", 42, 32, 1259, true), // Pool size: 26 (low_case) + 26 (up_case) + 10 (digits) + 6 (special), Entropy: 32, rockyoupasswordlist: True
     ]; // password string, pool size, entropy, expected database count
 
     #[test]
     fn test_pool_size_and_entropy() {
         use crate::calculate_entropy;
         use crate::get_pool_size;
-        
+
         for &(passcode, expected_pool_size, expected_entropy, _, _) in TEST_CASES {
             let pool_size = get_pool_size(passcode.to_string());
-  
-            assert_eq!(*pool_size.first().unwrap(), expected_pool_size, "Pool size is not correct {} != {}, passcode = {:?}.", pool_size[0], expected_pool_size, passcode);
+
+            assert_eq!(
+                *pool_size.first().unwrap(),
+                expected_pool_size,
+                "Pool size is not correct {} != {}, passcode = {:?}.",
+                pool_size[0],
+                expected_pool_size,
+                passcode
+            );
 
             let entropy = calculate_entropy(pool_size);
             assert_eq!(entropy.round() as i64, expected_entropy)
@@ -27,21 +34,31 @@ mod test {
     async fn test_password_list() {
         use crate::check_dictionary;
         for &(passcode, _, _, _, detected) in TEST_CASES {
-            let result = check_dictionary(passcode.to_string(), std::fs::File::open(format!("{}/../src-tauri/resources/rockyou.txt", env!("CARGO_MANIFEST_DIR"))).unwrap()).await;
+            let result = check_dictionary(
+                passcode.to_string(),
+                std::fs::File::open(format!(
+                    "{}/../src-tauri/resources/rockyou.txt",
+                    env!("CARGO_MANIFEST_DIR")
+                ))
+                .unwrap(),
+            )
+            .await;
             assert_eq!(result, detected)
         }
     }
 
-    
-    #[tokio::test] 
+    #[tokio::test]
     async fn pwned_test() {
         for &(passcode, _, _, expected_count, _) in TEST_CASES {
             let count = pwned_api::pass_check(passcode).await.unwrap();
-            assert!(count >= expected_count as u64, "Count should be greater than or equal to expected_count");
+            assert!(
+                count >= expected_count as u64,
+                "Count should be greater than or equal to expected_count"
+            );
         }
     }
 
-	#[test]
+    #[test]
     #[allow(non_snake_case)]
     pub fn check_time() {
         use crate::gpu::*;
