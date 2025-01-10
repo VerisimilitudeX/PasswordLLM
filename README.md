@@ -24,7 +24,7 @@ To use PasswordLLM, run the Powershell installer script by right clicking it and
 
 PasswordGPT will then evaluate the password and display the estimated time it would take an attacker to guess it. It will also provide suggestions for improving the strength of your password.
 
-## 12. Stars
+## Stars
 Researchers employing DNAnalyzer in their investigations are encouraged to star this repository. Such engagement strengthens community collaboration and perpetuates open-source innovation.
 
 <a href="https://star-history.com/#VerisimilitudeX/PasswordLLM&Date">
